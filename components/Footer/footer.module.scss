@@ -1,0 +1,28 @@
+@import 'vars';
+@import 'mixins';
+
+.footer {
+    @include flex($dir: column, $gap: 6px);
+    height: 60px;
+    background-color: $fg-05;
+    user-select: none;
+
+    .nav {
+        @include flex($gap: 20px);
+
+        a {
+            color: $mid-85;
+            font-size: 12px;
+            transition: 0.2s;
+
+            &:hover {
+                color: $primary;
+            }
+        }
+    }
+
+    .end {
+        color: $mid-75;
+        font-size: 12px;
+    }
+}

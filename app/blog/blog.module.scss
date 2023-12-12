@@ -1,0 +1,28 @@
+@import 'vars';
+@import 'mixins';
+
+.blog {
+    margin: 40px 25px;
+}
+
+.links {
+    @include flex(flex-start);
+
+    .link {
+        @include flex($gap: 5px);
+        padding: 4px 16px;
+        background-color: $fg-1;
+        box-shadow: 0 0 2px $fg;
+        border-radius: 4px;
+        transition: 0.2s;
+
+        &:hover {
+            background-color: $fg-2;
+        }
+
+        &:active {
+            transition: 0s;
+            background-color: $fg-3;
+        }
+    }
+}

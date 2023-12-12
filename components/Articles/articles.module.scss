@@ -1,0 +1,171 @@
+@import 'vars';
+@import 'mixins';
+
+.articles {
+    @include flex(space-between, stretch, row, wrap);
+    padding: 20px 0;
+}
+
+.article {
+    @include flex(space-between, $dir: column);
+    position: relative;
+    flex-basis: 45%;
+    margin: 10px;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 0 3px $fg;
+
+    .stack {
+        width: 100%;
+
+        .preview {
+            @include flex();
+
+            img {
+                width: 100%;
+                height: auto;
+            }
+        }
+
+        .title {
+            display: block;
+            padding: 10px 5px;
+            color: $mid-85;
+            font-size: 28px;
+            transition: 0.2s;
+
+            &:hover {
+                color: $fg;
+                text-shadow: 0 0 5px $fg;
+            }
+        }
+
+        .author {
+            @include flex(flex-start, $gap: 8px);
+            width: max-content;
+            padding: 3px 10px;
+            border-radius: 4px;
+            transition: 0.2s;
+            user-select: none;
+
+            .image {
+                @include flex();
+                min-width: 40px;
+                width: 40px;
+                height: 40px;
+                border-radius: 50%;
+                overflow: hidden;
+
+                img {
+                    width: 100%;
+                    height: auto;
+                }
+            }
+
+            .body {
+                @include flex(flex-start, flex-start, $dir: column);
+
+                .name {
+                    color: $mid-75;
+                    transition: 0.2s;
+                }
+
+                .date {
+                    color: $mid-75;
+                    font-size: 12px;
+                }
+            }
+
+            &:hover {
+                background-color: $fg-1;
+
+                .name {
+                    color: $fg;
+                }
+            }
+        }
+
+        .tags {
+            @include flex(flex-start, $wrap: wrap, $gap: 10px);
+            margin: 15px 5px;
+
+            .tag {
+                padding: 4px 16px;
+                color: $mid-85;
+                background-color: $fg-1;
+                border-radius: 4px;
+                transition: 0.2s;
+
+                &:hover {
+                    background-color: $fg-2;
+                    color: $fg;
+                }
+
+                &:active {
+                    transition: 0s;
+                    background-color: $fg-3;
+                    color: $fg;
+                }
+            }
+        }
+    }
+
+    .content {
+        position: relative;
+        margin: 0 5px;
+        max-height: 100px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+
+        &::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-image: linear-gradient(0deg, $bg 0px, transparent 50%);
+        }
+    }
+
+    .button {
+        @include flex($gap: 5px);
+        width: 100%;
+        margin: 10px 0;
+        padding: 4px 12px;
+        background-color: $fg-1;
+        border-radius: 4px;
+        color: $mid-75;
+        transition: 0.2s;
+
+        svg {
+            transition: 0.2s;
+        }
+
+        &:hover {
+            background-color: $fg-2;
+            color: $fg;
+
+            svg {
+                transform: translateX(5px);
+                color: $fg;
+            }
+        }
+
+        &:active {
+            transition: 0s;
+            background-color: $fg-3;
+            color: $fg;
+        }
+    }
+}
+
+@media screen and (max-width: 750px) {
+    .articles {
+        flex-direction: column;
+
+        .article {
+            flex-basis: auto;
+        }
+    }
+}

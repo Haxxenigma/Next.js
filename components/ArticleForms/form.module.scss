@@ -1,0 +1,173 @@
+@import 'vars';
+@import 'mixins';
+
+.field {
+    @include flex(flex-start, $wrap: wrap);
+    position: relative;
+    margin-top: 20px;
+
+    .title,
+    .content,
+    .tags {
+        width: 100%;
+        padding: 8px 16px;
+        background-color: $fg-01;
+        // border: 1px solid $secondary;
+        // box-shadow: 0 0 5px 1px $secondary;
+        border-bottom: 1px solid $secondary-7;
+        border-radius: 4px;
+        transition: 0.2s;
+
+        ~.label {
+            position: absolute;
+            width: 100%;
+            top: 8px;
+            left: 17px;
+            color: $mid-75;
+            pointer-events: none;
+        }
+
+        &.notEmpty {
+            ~.label {
+                display: none;
+            }
+        }
+
+        &:focus {
+            background-color: $fg-05;
+            border-bottom: 1px solid $secondary;
+            // background-color: $secondary-1;
+            // border: 1px solid $secondary;
+        }
+    }
+
+    .upload {
+        @include flex();
+
+        .uploadBtn {
+            @include flex($gap: 5px);
+            padding: 12px 28px;
+            background-color: $secondary-1;
+            border: 1px solid $secondary;
+            border-radius: 4px;
+            transition: 0.2s;
+            cursor: pointer;
+
+            &:hover {
+                background-color: $secondary-2;
+            }
+
+            &:active {
+                transition: 0s;
+                background-color: $secondary-3;
+            }
+
+            .preview {
+                width: 0;
+                height: 0;
+            }
+        }
+    }
+
+    .uploadedImage {
+        margin-top: 8px;
+        padding: 0 16px;
+        background-color: $secondary-1;
+        border: 1px solid $secondary;
+        border-radius: 4px;
+        user-select: none;
+    }
+
+    .title {
+        font-size: 28px;
+
+        ~.label {
+            font-size: 28px;
+        }
+    }
+
+    .content {
+        resize: none;
+    }
+
+    .buttons {
+        @include flex($gap: 20px);
+
+        .submit,
+        .cancel {
+            @include flex($gap: 5px);
+            padding: 8px 28px;
+            border-radius: 4px;
+            transition: 0.2s;
+
+            &:active {
+                transition: 0s;
+            }
+        }
+
+        .submit {
+            @include loader();
+            color: $mid-85;
+            background-color: $secondary-1;
+            border: 1px solid $secondary;
+
+            &:hover {
+                color: $fg;
+                background-color: $secondary-2;
+            }
+
+            &:active {
+                color: $fg;
+                background-color: $secondary-3;
+            }
+
+            &:disabled {
+                filter: grayscale(1);
+                color: $mid-75;
+            }
+        }
+
+        .cancel {
+            color: $mid-85;
+            background-color: $fg-1;
+            border: 1px solid $fg-5;
+
+            &:hover {
+                color: $fg;
+                background-color: $fg-2;
+                border: 1px solid $fg;
+            }
+
+            &:active {
+                color: $fg;
+                background-color: $fg-3;
+                border: 1px solid $fg;
+            }
+        }
+    }
+
+    .errors {
+        margin-top: 8px;
+        padding: 0 16px;
+        background-color: $red-1;
+        border: 1px solid $red;
+        border-radius: 4px;
+        user-select: none;
+    }
+
+    &.errors {
+
+        .title,
+        .content,
+        .tags {
+            &:focus {
+                border: 1px solid $red;
+                box-shadow: 0 0 5px $red-5;
+
+                &~.label {
+                    color: $red;
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,111 @@
+@import 'vars';
+@import 'mixins';
+
+.article {
+    padding: 30px 10px;
+
+    .links {
+        @include flex(flex-start, $gap: 15px);
+
+        .link {
+            padding: 4px 16px;
+            background-color: $fg-1;
+            border-radius: 4px;
+            transition: 0.2s;
+
+            &:hover {
+                background-color: $fg-2;
+            }
+
+            &:active {
+                transition: 0s;
+                background-color: $fg-3;
+            }
+        }
+    }
+
+    .title {
+        display: block;
+        margin: 15px;
+        font-size: 24px;
+        cursor: default;
+    }
+
+    .author {
+        @include flex(flex-start, $gap: 8px);
+        padding: 3px 10px;
+        width: max-content;
+        border-radius: 4px;
+        transition: 0.2s;
+
+        &:hover {
+            color: $fg;
+            background-color: $fg-1;
+        }
+
+        .image {
+            @include flex();
+            min-width: 40px;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            overflow: hidden;
+
+            img {
+                width: 40px;
+                height: auto;
+            }
+        }
+
+        .body {
+            @include flex(flex-start, flex-start, $dir: column);
+
+            .name {
+                text-wrap: nowrap;
+            }
+
+            .date {
+                color: $mid-75;
+                font-size: 14px;
+                user-select: none;
+            }
+        }
+    }
+
+    .tags {
+        @include flex(flex-start, $gap: 10px);
+
+        .tag {
+            margin: 15px 0;
+            padding: 4px 16px;
+            color: $mid-75;
+            background-color: $fg-1;
+            border-radius: 4px;
+            transition: 0.2s;
+
+            &:hover {
+                background-color: $fg-2;
+                color: $fg;
+            }
+
+            &:active {
+                transition: 0s;
+                background-color: $fg-3;
+                color: $fg;
+            }
+        }
+    }
+
+    .preview {
+        @include flex();
+
+        img {
+            width: 80%;
+            height: auto;
+        }
+    }
+
+    .content {
+        padding: 10px 20px;
+    }
+}

@@ -1,0 +1,173 @@
+@import 'vars';
+@import 'mixins';
+
+.layout {
+    @include flex(flex-start, flex-start);
+    min-height: calc(100vh - 60px - 100px);
+    background-image: radial-gradient(circle at left top, $fg-05 0%, $fg-1 100%);
+    border-radius: 12px;
+    margin: 50px 16px;
+}
+
+.toggleNav {
+    @include flex();
+    display: none;
+    position: sticky;
+    top: 75px;
+    margin: 15px 5px 15px 15px;
+    color: $mid-75;
+    border-radius: 4px;
+    transition: 0.2s;
+
+    &:hover {
+        background-color: $fg-1;
+        color: $fg;
+    }
+
+    &:active {
+        transition: 0s;
+        background-color: $fg-2;
+        color: $fg;
+    }
+}
+
+.nav {
+    @include flex(flex-start, flex-start, column, nowrap, 3px);
+    flex-basis: 20%;
+    padding: 15px;
+    user-select: none;
+    z-index: 1;
+
+    .title {
+        position: relative;
+        width: 100%;
+        font-size: 28px;
+        margin-bottom: 20px;
+        border-bottom: 1px solid $fg-8;
+
+        .closeNav {
+            @include flex();
+            position: absolute;
+            display: none;
+            left: 110%;
+            top: 0;
+            color: $mid-75;
+            background-color: $bg-7;
+            border: 1px solid $fg-5;
+            box-shadow: 1px 1px 10px $black;
+            border-radius: 4px;
+            transition: 0.2s;
+
+            &:hover {
+                color: $fg;
+                background-color: $bg-5;
+            }
+        }
+    }
+
+    .linkCnt {
+        position: relative;
+        width: 100%;
+        color: $mid-75;
+
+        .link {
+            @include flex(flex-start, $gap: 5px);
+            @include ripples();
+            width: 100%;
+            height: 40px;
+            padding: 0 20px;
+            border-radius: 8px;
+            transition: 0.2s;
+
+            &:hover {
+                background-color: $fg-1;
+                color: $fg;
+            }
+
+            &:active {
+                background-color: $fg-2;
+                color: $fg;
+            }
+
+            &:after {
+                content: '';
+                position: absolute;
+                width: 4px;
+                height: 60%;
+                top: 50%;
+                left: 4px;
+                background-color: $fg;
+                border-radius: 8px;
+                transition: 0.2s;
+                transform-origin: center;
+                transform: translateY(-50%) scale(0);
+            }
+
+            &.active {
+                color: $fg;
+
+                &::after {
+                    transform: translateY(-50%) scale(1);
+                }
+            }
+        }
+    }
+}
+
+.wrapper {
+    flex-basis: 80%;
+}
+
+@media screen and (max-width: 750px) {
+    .layout {
+        gap: 0;
+    }
+
+    .toggleNav {
+        display: flex;
+    }
+
+    .nav {
+        position: fixed;
+        width: 200px;
+        top: 60px;
+        left: -1%;
+        bottom: 0;
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+        background-color: $bg-8;
+        border-radius: 4px;
+        transition: 0.2s;
+
+        .title {
+            .closeNav {
+                display: flex;
+            }
+        }
+
+        &.show {
+            top: 60px;
+            left: 0;
+            opacity: 1;
+            visibility: visible;
+            pointer-events: all;
+        }
+
+        .linkCnt .link .ripples {
+            display: none;
+        }
+    }
+
+    .wrapper {
+        flex-basis: 100%;
+    }
+}
+
+@media screen and (max-width: 650px) {
+    .layout {
+        min-height: calc(100vh - 60px);
+        margin: 0;
+        border-radius: 0;
+    }
+}

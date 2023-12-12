@@ -1,0 +1,73 @@
+@import 'vars';
+@import 'mixins';
+
+.main {
+    display: flex;
+    flex-direction: column;
+    max-width: 1000px;
+    min-height: calc(100vh - 60px - 60px);
+    margin: 0 auto;
+}
+
+.notFound,
+.forbidden,
+.error {
+    @include flex($dir: column);
+    flex-grow: 1;
+    user-select: none;
+
+    .title {
+        font-size: 32px;
+    }
+
+    .info {
+        margin-top: 5px;
+        color: $mid;
+    }
+
+    .btn {
+        margin-top: 20px;
+        padding: 4px 20px;
+        color: $mid-75;
+        border: 1px solid $mid;
+        border-radius: 4px;
+        transition: 0.2s;
+
+        &:hover {
+            color: $fg;
+            background-color: $fg-1;
+            border: 1px solid $fg;
+        }
+
+        &:active {
+            transition: 0s;
+            color: $fg;
+            background-color: $fg-2;
+            border: 1px solid $fg;
+        }
+    }
+}
+
+.loading {
+    @include flex();
+    flex-grow: 1;
+
+    .loader {
+        width: 48px;
+        height: 48px;
+        border: 5px solid $fg;
+        border-bottom-color: $primary;
+        border-radius: 50%;
+        animation: rotation 0.5s linear infinite;
+    }
+
+    @keyframes rotation {
+        0% {
+            transform: rotate(0deg);
+        }
+
+        100% {
+            transform: rotate(360deg);
+        }
+    }
+}

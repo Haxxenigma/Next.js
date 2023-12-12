@@ -1,0 +1,53 @@
+@import 'vars';
+@import 'mixins';
+
+.about {
+    @include flex($dir: column);
+    flex-grow: 1;
+    padding: 20px;
+    cursor: default;
+
+    .header {
+        @include flex(flex-start);
+        width: 100%;
+        font-size: 40px;
+    }
+
+    .info {
+        p {
+            color: $mid-75;
+            margin: 0 0 20px 15px;
+        }
+
+        .list {
+            @include flex(space-between, stretch, $wrap: wrap);
+
+            .item {
+                @include flex($dir: column);
+                flex-basis: 30%;
+                padding: 8px 16px;
+                color: $mid-75;
+                background-color: $fg-05;
+                box-shadow: 0 0 2px $fg;
+                border-radius: 8px;
+                text-align: center;
+
+                .image {
+                    @include flex();
+                    height: 50px;
+                    color: $fg;
+                }
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 650px) {
+    .about {
+        .info {
+            .list {
+                flex-direction: column;
+            }
+        }
+    }
+}

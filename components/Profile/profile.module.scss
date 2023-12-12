@@ -1,0 +1,156 @@
+@import 'vars';
+@import 'mixins';
+
+.header {
+    @include flex(flex-start, flex-start);
+    position: relative;
+    margin: 40px 40px;
+
+    .imageCnt {
+        @include tooltip();
+        position: relative;
+
+        .image {
+            @include flex();
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            overflow: hidden;
+
+            img {
+                width: 100%;
+                height: auto;
+            }
+        }
+    }
+
+    .info {
+        margin-left: 16px;
+        user-select: none;
+
+        .name {
+            font-size: 24px;
+        }
+
+        .createdAt {
+            @include flex();
+            margin-bottom: 5px;
+            font-size: 12px;
+
+            span {
+                margin-left: 5px;
+                font-size: 12px;
+                font-weight: 600;
+            }
+
+            .birth {
+                margin-left: 5px;
+                font-size: 12px;
+            }
+        }
+    }
+
+    .actions {
+        @include flex($gap: 10px);
+        position: absolute;
+        top: 0;
+        right: 0;
+
+        .action {
+            @include flex();
+            @include tooltip();
+            position: relative;
+            width: 40px;
+            height: 40px;
+            padding: 4px;
+            border-radius: 4px;
+            color: $mid-75;
+            transition: 0.2s;
+
+            &:hover {
+                background-color: $fg-1;
+                color: $fg;
+            }
+
+            &:active {
+                transition: 0s;
+                background-color: $fg-2;
+                color: $mid-75;
+            }
+
+            svg {
+                font-size: 24px;
+            }
+        }
+    }
+}
+
+.articles {
+    margin: 0 10pxs;
+
+    .title {
+        @include flex();
+        position: relative;
+        width: max-content;
+        margin-left: 10px;
+        border-bottom: 2px solid $primary;
+        user-select: none;
+
+        &:after {
+            content: '#';
+            position: absolute;
+            left: 105%;
+            font-size: 24px;
+            opacity: 0.5;
+            transition: 0.2s;
+        }
+
+        &:hover {
+            &::after {
+                opacity: 1;
+            }
+        }
+
+        h2 {
+            font-size: 20px;
+            font-weight: 500;
+        }
+    }
+}
+
+@media screen and (max-width: 500px) {
+    .header {
+        flex-direction: column;
+        margin: 40px 10px;
+
+        .imageCnt,
+        .info {
+            align-self: center;
+            margin: 0;
+
+            .name {
+                text-align: center;
+            }
+        }
+
+        .imageCnt {
+            z-index: 1;
+
+            .tooltip {
+                bottom: 110%;
+                top: auto;
+
+                &:after {
+                    top: 100%;
+                    bottom: auto;
+                    border-color: $fg-1 transparent transparent transparent;
+                }
+            }
+        }
+
+        .actions {
+            width: 100%;
+            justify-content: space-around;
+        }
+    }
+}

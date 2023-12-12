@@ -1,0 +1,518 @@
+@import 'vars';
+@import 'mixins';
+
+.header {
+    @include flex();
+    position: sticky;
+    height: 60px;
+    top: 0;
+    left: 0;
+    right: 0;
+    padding: 0 16px;
+    background-color: $bg-6;
+    box-shadow: 0 1px 3px $fg-3;
+    backdrop-filter: blur(5px);
+    user-select: none;
+    z-index: 10;
+
+    .nav {
+        @include flex(space-between);
+        width: 100%;
+        height: 100%;
+        max-width: 1000px;
+    }
+}
+
+.navLeft {
+    @include flex();
+
+    .toggleNav {
+        @include flex();
+        position: relative;
+        display: none;
+        width: 40px;
+        height: 40px;
+        border-radius: 4px;
+        transition: 0.2s;
+
+        .menu,
+        .xmark {
+            @include flex();
+            position: absolute;
+            transition: 0.2s;
+        }
+
+        .xmark {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        &.active {
+            .menu {
+                opacity: 0;
+                visibility: hidden;
+            }
+
+            .xmark {
+                opacity: 1;
+                visibility: visible;
+            }
+        }
+
+        &:hover {
+            background-color: $fg-1;
+        }
+
+        &:active {
+            transition: 0s;
+            background-color: $fg-2;
+        }
+    }
+
+    .logo {
+        @include flex();
+        margin: 0 15px;
+
+        img {
+            width: 50px;
+            height: 50px;
+        }
+    }
+
+    .mobLinksCnt {
+        @include flex(flex-start, $dir: column);
+        position: absolute;
+        display: none;
+        width: 100%;
+        height: calc(100vh - 60px);
+        padding: 0 20px;
+        top: 60px;
+        left: 0;
+        right: 0;
+        background-color: $bg-8;
+
+        .link {
+            @include flex(flex-start, $gap: 5px);
+            width: 100%;
+            max-width: 1000px;
+            height: 50px;
+            color: $mid;
+            transition: 0.2s;
+
+            &:hover {
+                color: $fg;
+            }
+
+            &.active {
+                color: $fg;
+            }
+
+            &[href='/signup'] {
+                border-bottom: 1px solid $mid;
+            }
+        }
+    }
+
+    .linksCnt {
+        @include flex($gap: 15px);
+
+        .linkCnt {
+            position: relative;
+
+            &::after {
+                content: '';
+                display: block;
+                width: 100%;
+                height: 1px;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                scale: 0;
+                background-color: $fg;
+                border-radius: 4px;
+                transform-origin: center;
+                translate: 0 13px;
+                transition: 0.2s;
+            }
+
+            &.active::after {
+                scale: 1;
+            }
+
+            &.active>.link {
+                color: $fg;
+            }
+        }
+
+        .link {
+            @include flex();
+            @include ripples();
+            height: 35px;
+            padding: 0 16px;
+            border-radius: 4px;
+            transition: 0.2s;
+            color: $mid-75;
+            font-size: 14px;
+
+            &:hover {
+                background-color: $fg-1;
+                color: $fg;
+            }
+        }
+    }
+}
+
+.navRight {
+    @include flex();
+
+    .signin,
+    .signup {
+        @include flex($gap: 5px);
+        margin-left: 24px;
+        padding: 4px 16px;
+        border-radius: 4px;
+        transition: 0.2s;
+
+        span {
+            font-size: 14px;
+        }
+    }
+
+    .signin {
+        box-shadow: 0 0 2px $fg;
+
+        &:hover {
+            background-color: $fg-1;
+        }
+
+        &:active {
+            transition: 0s;
+            background-color: $fg-2;
+        }
+    }
+
+    .signup {
+        color: $bg;
+        background-image: linear-gradient(45deg, $primary, $secondary);
+        box-shadow: inset 0 0 50px $fg-1;
+
+        &:hover {
+            box-shadow: inset 0 0 50px $fg-3;
+        }
+
+        &:active {
+            transition: 0s;
+            box-shadow: inset 0 0 50px $fg-6;
+        }
+    }
+
+    .search {
+        @include flex(flex-start, $gap: 5px);
+        width: 200px;
+        height: 30px;
+        padding: 0 10px;
+        background-color: $fg-05;
+        box-shadow: inset 0 0 10px $fg-1;
+        border-radius: 4px;
+        color: $mid-75;
+        transition: 0.2s;
+
+        &:hover {
+            color: $fg;
+            background-color: $fg-1;
+        }
+
+        svg {
+            font-size: 20px;
+        }
+
+        span {
+            font-size: 14px;
+        }
+    }
+}
+
+.modalCnt {
+    @include flex();
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 100vh;
+    background-color: $black-5;
+    transition: 0.2s;
+    z-index: 1;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+
+    .searchModal {
+        @include flex(flex-start, $dir: column);
+        position: relative;
+        width: 600px;
+        min-height: 150px;
+        max-height: 400px;
+        background-color: $bg-8;
+        border-radius: 8px;
+        box-shadow: 0 0 10px $fg-3;
+
+        .input {
+            width: 100%;
+            padding: 16px 20px;
+            border-bottom: 1px solid $fg-3;
+        }
+
+        .closeModal {
+            position: absolute;
+            top: 16px;
+            right: 20px;
+            color: $mid-75;
+            transition: 0.2s;
+            cursor: pointer;
+
+            &:hover {
+                color: $fg;
+            }
+        }
+
+        .results {
+            @include flex(flex-start, $dir: column);
+            width: 100%;
+            padding: 5px;
+            overflow: auto;
+
+            .article {
+                @include flex(flex-start);
+                width: 100%;
+                height: 40px;
+                min-height: 40px;
+                color: $mid-75;
+                border-radius: 4px;
+                transition: 0.2s;
+
+                .image {
+                    @include flex();
+                    padding: 0 10px
+                }
+
+                .title {
+                    @include flex();
+                    font-size: 14px;
+                }
+
+                &:hover {
+                    color: $fg;
+                    background-color: $fg-1
+                }
+            }
+        }
+
+        .notFound {
+            @include flex();
+            flex-grow: 1;
+            color: $mid-75;
+
+            span {
+                margin-left: 5px;
+                color: $fg;
+            }
+        }
+    }
+
+    &.show {
+        opacity: 1;
+        visibility: visible;
+        pointer-events: all;
+    }
+}
+
+.dropdownCnt {
+    position: relative;
+    margin-left: 24px;
+
+    .dropdownBtn {
+        @include flex(space-between, $gap: 5px);
+        @include ripples();
+        min-width: 120px;
+        height: 45px;
+        padding: 0 5px;
+        border-radius: 8px;
+        transition: 0.2s;
+        cursor: pointer;
+
+        >* {
+            pointer-events: none;
+        }
+
+        &:hover {
+            background-color: $fg-1;
+
+            .name,
+            .arrow {
+                color: $fg;
+            }
+        }
+
+        &:active {
+            transition: 0s;
+            background-color: $fg-2;
+
+            .name,
+            .arrow {
+                color: $fg;
+            }
+        }
+
+        .image {
+            @include flex();
+            min-width: 35px;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            overflow: hidden;
+
+            img {
+                width: 100%;
+                height: auto;
+            }
+        }
+
+        .name {
+            @include flex(flex-start);
+            color: $mid-75;
+            transition: 0.2s;
+
+            span {
+                max-width: 75px;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+        }
+
+        .arrow {
+            @include flex();
+            color: $mid-75;
+            transition: 0.2s;
+
+            &.active {
+                rotate: 180deg;
+            }
+        }
+    }
+
+    .dropdown {
+        @include flex($dir: column, $gap: 5px);
+        position: absolute;
+        width: 200px;
+        top: 110%;
+        right: 0;
+        padding: 8px 4px;
+        background-color: $bg-8;
+        box-shadow: inset 0 0 100px $fg-2;
+        border-radius: 8px;
+        transition: 0.2s;
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+        z-index: 1;
+
+        &.active {
+            top: 125%;
+            opacity: 1;
+            visibility: visible;
+            pointer-events: all;
+        }
+
+        a {
+            @include flex(flex-start, $gap: 5px);
+            width: 100%;
+            height: 40px;
+            padding: 8px 12px;
+            color: $mid-75;
+            border-radius: 4px;
+            transition: 0.2s;
+            cursor: pointer;
+
+            &:hover {
+                color: $fg;
+                background-color: $fg-1;
+            }
+
+            &:active {
+                color: $fg;
+                background-color: $fg-2;
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 850px) {
+    .navRight {
+        .search {
+            justify-content: center;
+            width: 35px;
+            height: 35px;
+            padding: 0;
+            background-color: transparent;
+
+            svg {
+                font-size: 28px;
+            }
+
+            span {
+                display: none;
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 650px) {
+    .navLeft {
+
+        .toggleNav {
+            display: flex;
+        }
+
+        .linksCnt {
+            display: none;
+        }
+
+        .mobLinksCnt.show {
+            display: flex;
+        }
+    }
+
+    .navRight {
+        .signup {
+            display: none;
+        }
+
+        .signin,
+        .signup {
+            padding: 6px;
+
+            span {
+                display: none;
+            }
+        }
+    }
+
+    .dropdownCnt {
+        .dropdownBtn {
+            min-width: 50px;
+
+            .name,
+            .arrow {
+                display: none;
+            }
+        }
+    }
+
+    .modalCnt {
+        .searchModal {
+            height: 75vh;
+            max-height: none;
+            align-self: flex-end;
+        }
+    }
+}

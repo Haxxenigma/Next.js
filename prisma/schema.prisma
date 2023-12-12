@@ -1,0 +1,36 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Article {
+  id         Int       @id @default(autoincrement())
+  title      String    @db.VarChar(255)
+  content    String    @db.Text
+  tags       String    @db.Text
+  preview    String?   @db.Text
+  createdAt  DateTime? @default(now()) @db.Timestamp(0)
+  updatedAt  DateTime? @default(now()) @db.Timestamp(0)
+  authorName String
+  author     User      @relation(fields: [authorName], references: [name], onDelete: Cascade, map: "Article_ibfk_1")
+
+  @@index([authorName], map: "author")
+}
+
+model User {
+  id        Int       @id @default(autoincrement())
+  name      String    @unique(map: "name") @db.VarChar(255)
+  email     String    @unique(map: "email") @db.VarChar(255)
+  password  String    @db.Char(60)
+  image     String?   @default("/media/avatar.svg") @db.VarChar(255)
+  birth     DateTime? @db.Date
+  bio       String?   @db.Text
+  verified  Boolean   @default(false)
+  createdAt DateTime? @default(now()) @db.Timestamp(0)
+  updatedAt DateTime? @default(now()) @db.Timestamp(0)
+  articles  Article[]
+}
