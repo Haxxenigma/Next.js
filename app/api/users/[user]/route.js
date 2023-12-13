@@ -7,9 +7,9 @@ import { rmSync } from 'fs';
 export async function PATCH(req, { params }) {
     const data = await req.json();
     const username = params.user;
-    const { bio, birth, ...requiredData } = data;
+    const requiredFields = ['name', 'email'];
 
-    const res = await validateFields(requiredData);
+    const res = await validateFields(data, requiredFields);
     if (res) return res;
 
     const res2 = await validateEmail(data.email);
@@ -68,7 +68,7 @@ export async function PATCH(req, { params }) {
 
     if (isExist.length) {
         const statusText = 'Name or email already exists';
-        return Response.json({ error: statusText }, { status: 409, statusText });
+        return Response.json({ error: statusText }, { status: 409 });
     }
 
     data.birth = data.birth ? `${data.birth}T00:00:00.000Z` : null;
@@ -92,8 +92,9 @@ export async function DELETE(req, { params }) {
     const searchParams = req.nextUrl.searchParams;
     const password = searchParams.get('password');
     const name = params.user;
+    const requiredFields = ['name', 'password'];
 
-    const res = await validateFields({ name, password });
+    const res = await validateFields({ name, password }, requiredFields);
     if (res) return res;
 
     const user = await prisma.user.findUnique({
@@ -122,5 +123,5 @@ export async function DELETE(req, { params }) {
     }
 
     const statusText = 'Incorrect password';
-    return Response.json({ error: statusText }, { status: 401, statusText });
+    return Response.json({ error: statusText }, { status: 401 });
 }

@@ -3,8 +3,9 @@ import { validateFields } from '@/utils/validators';
 
 export async function POST(req) {
     const data = await req.json();
+    const requiredFields = ['title', 'content', 'tags', 'author'];
 
-    const res = await validateFields(data);
+    const res = await validateFields(data, requiredFields);
     if (res) return res;
 
     const article = await prisma.article.create({

@@ -26,8 +26,9 @@ export async function GET() {
 
 export async function POST(req) {
     const data = await req.json();
+    const requiredFields = ['name', 'email', 'password1', 'password2'];
 
-    const res = await validateFields(data);
+    const res = await validateFields(data, requiredFields);
     if (res) return res;
 
     const res2 = await validateEmail(data.email);
@@ -35,7 +36,7 @@ export async function POST(req) {
 
     if (data.password1 !== data.password2) {
         const statusText = 'Passwords don\'t match';
-        return Response.json({ error: statusText }, { status: 400, statusText });
+        return Response.json({ error: statusText }, { status: 400 });
     }
 
     const isExist = await prisma.user.findMany({
@@ -60,7 +61,7 @@ export async function POST(req) {
 
     if (isExist.length) {
         const statusText = 'Name or email already exists';
-        return Response.json({ error: statusText }, { status: 409, statusText });
+        return Response.json({ error: statusText }, { status: 409 });
     }
 
     const salt = await genSalt(10);

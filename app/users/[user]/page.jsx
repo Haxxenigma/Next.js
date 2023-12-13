@@ -1,4 +1,5 @@
 import prisma from '@/configs/prisma';
+import getUser from '@/utils/getUser';
 import Profile from '@/components/Profile/profile';
 import { notFound } from 'next/navigation';
 
@@ -16,6 +17,10 @@ export default async function User({ params }) {
         },
     });
 
+    if (!user) return notFound();
+
+    const viewer = await getUser();
+
     const articles = await prisma.article.findMany({
         where: {
             authorName: params.user,
@@ -32,9 +37,7 @@ export default async function User({ params }) {
         },
     });
 
-    if (!user) notFound();
-
     return (
-        <Profile user={user} articles={articles} />
+        <Profile user={user} viewer={viewer} articles={articles} />
     );
 }

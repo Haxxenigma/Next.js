@@ -1,32 +1,21 @@
 import '@/styles/reset.scss';
-import jwt from 'jsonwebtoken';
-import prisma from '@/configs/prisma';
-import styles from '@/styles/main.module.scss';
 import Header from '@/components/Header/header';
 import Footer from '@/components/Footer/footer';
 import Providers from '@/components/Providers/providers';
 import Forbidden from '@/components/Forbidden/forbidden';
-import { cookies } from 'next/headers';
+import styles from '@/styles/main.module.scss';
+import getUser from '@/utils/getUser';
 import { Inter } from 'next/font/google';
 
+export const metadata = {
+    title: {
+        template: '%s | My Web App',
+        default: 'My Web App',
+    },
+    description: 'Next.js 13 powered website',
+};
+
 const inter = Inter({ subsets: ['cyrillic', 'latin'] });
-
-async function getUser() {
-    const cookie = cookies().get('auth');
-
-    if (!cookie) return null;
-
-    const decoded = jwt.verify(cookie.value, process.env.JWT_KEY);
-
-    const user = await prisma.user.findUniqueOrThrow({
-        where: {
-            id: decoded.id,
-        },
-    });
-
-    const { password, ...userData } = user;
-    return userData;
-}
 
 export default async function RootLayout({ children }) {
     try {
@@ -34,7 +23,7 @@ export default async function RootLayout({ children }) {
 
         return (
             <Providers>
-                <html lang='en' dark=''>
+                <html lang='en'>
                     <body className={inter.className}>
                         <Header user={user} />
                         <main className={styles.main}>{children}</main>
