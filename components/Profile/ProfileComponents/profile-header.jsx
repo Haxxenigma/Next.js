@@ -1,7 +1,5 @@
-'use client';
 import Link from 'next/link';
-import { IoMail, IoSettings } from 'react-icons/io5';
-import { FaUserFriends } from 'react-icons/fa';
+import { IoSettings } from 'react-icons/io5';
 
 export default function ProfileHeader({ styles, user, viewer }) {
     const options = { year: 'numeric', month: 'short', day: 'numeric' };
@@ -11,14 +9,14 @@ export default function ProfileHeader({ styles, user, viewer }) {
             <div className={styles.imageCnt}>
                 <Link
                     className={styles.image}
-                    href={viewer && viewer.name === user.name
+                    href={viewer.name === user.name
                         ? `/users/${user.name}/settings`
                         : user.image
                     }
                 >
                     <img src={user.image} alt='' />
                 </Link>
-                {viewer?.name === user.name && (
+                {viewer.name === user.name && (
                     <div className={styles.tooltip}>
                         Change your avatar
                     </div>
@@ -40,32 +38,16 @@ export default function ProfileHeader({ styles, user, viewer }) {
                     {user.bio}
                 </div>
             </div>
-            {viewer && (
-                <div className={styles.actions}>
-                    <Link className={styles.action} href={`/users/${user.name}/mail`}>
-                        <IoMail />
+            <div className={styles.actions}>
+                {viewer.name === user.name && (
+                    <Link className={styles.action} href={`/users/${user.name}/settings`}>
+                        <IoSettings />
                         <div className={styles.tooltip}>
-                            Mail
+                            Settings
                         </div>
                     </Link>
-                    {viewer?.name === user.name && (
-                        <Link className={styles.action} href={`/users/${user.name}/settings`}>
-                            <IoSettings />
-                            <div className={styles.tooltip}>
-                                Settings
-                            </div>
-                        </Link>
-                    )}
-                    {viewer?.name !== user.name && (
-                        <Link className={styles.action} href={`/api/friends/${user.name}`}>
-                            <FaUserFriends />
-                            <div className={styles.tooltip}>
-                                Add to friends
-                            </div>
-                        </Link>
-                    )}
-                </div>
-            )}
+                )}
+            </div>
         </div>
     );
 }

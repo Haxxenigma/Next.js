@@ -6,8 +6,9 @@ import { compare } from 'bcrypt';
 
 export async function POST(req) {
     const data = await req.json();
+    const requiredFields = ['name', 'password'];
 
-    const res = await validateFields(data);
+    const res = await validateFields(data, requiredFields);
     if (res) return res;
 
     const user = await prisma.user.findUnique({

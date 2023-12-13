@@ -5,8 +5,9 @@ import { validateFields } from '@/utils/validators';
 export async function PATCH(req, { params }) {
     const data = await req.json();
     const name = params.user;
+    const requiredFields = ['password1', 'password2', 'password3'];
 
-    const res = await validateFields(data);
+    const res = await validateFields(data, requiredFields);
     if (res) return res;
 
     if (data.password2 !== data.password3) {

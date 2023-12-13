@@ -109,16 +109,6 @@ export default function NavRight({ styles, user }) {
                     >
                         <FaUserPlus size={20} /><span>Sign Up</span>
                     </Link>
-                    {/* <HeaderLink
-                                className={styles.signin}
-                                path={'/signin'}
-                                value={<><LogIn size={20} />Sign In</>}
-                            />
-                            <HeaderLink
-                                className={styles.signup}
-                                path={'/signup'}
-                                value={<><UserPlus size={20} />Sign Up</>}
-                            /> */}
                 </>
             )}
         </div>

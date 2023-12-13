@@ -9,7 +9,7 @@ import { GiCheckMark } from 'react-icons/gi';
 import { FaXmark } from 'react-icons/fa6';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 const fields = [
     {
@@ -52,6 +52,7 @@ const fields = [
 
 export default function General({ user }) {
     const [isVisibleModal, setVisibleModal] = useState(false);
+    const [objDataUrl, setObjDataUrl] = useState(null);
     const {
         register,
         handleSubmit,
@@ -74,9 +75,16 @@ export default function General({ user }) {
     });
     const router = useRouter();
 
+    useEffect(() => {
+        if (watch('image')[0]) {
+            setObjDataUrl(URL.createObjectURL(watch('image')[0]));
+        } else {
+            setObjDataUrl(null);
+        }
+    }, [watch('image')]);
+
     const postAvatar = async (image, name) => {
         try {
-            clearErrors();
             const formData = new FormData();
             formData.append('image', image);
             await axios.post(`/users/${name}/avatar`, formData, {
@@ -85,7 +93,7 @@ export default function General({ user }) {
                 },
             });
         } catch (err) {
-            setError('root', { type: 'root', message: err.response.statusText });
+            setError('root', { type: 'root', message: err.response.data.error });
         }
     };
 
@@ -95,7 +103,7 @@ export default function General({ user }) {
             await axios.delete(`/users/${user.name}/avatar`);
             router.refresh();
         } catch (err) {
-            setError('root', { type: 'root', message: err.response.statusText });
+            setError('root', { type: 'root', message: err.response.data.error });
             setVisibleModal(false);
         }
     };
@@ -109,7 +117,7 @@ export default function General({ user }) {
             router.push(`/users/${data.name}/settings`);
             router.refresh();
         } catch (err) {
-            setError('root', { type: 'root', message: err.response.statusText });
+            setError('root', { type: 'root', message: err.response.data.error });
         }
     };
 
@@ -137,6 +145,7 @@ export default function General({ user }) {
                                     userImage={user.image}
                                     watch={watch}
                                     setVisibleModal={setVisibleModal}
+                                    objDataUrl={objDataUrl}
                                 />
                             )}
                             <input

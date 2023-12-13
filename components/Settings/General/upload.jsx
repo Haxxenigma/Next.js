@@ -1,10 +1,9 @@
-import Image from 'next/image';
 import { useEffect, useRef } from 'react';
 import { BiSolidEdit } from 'react-icons/bi';
 import { ImUpload } from 'react-icons/im';
 import { MdDeleteForever } from 'react-icons/md';
 
-export default function Upload({ styles, userImage, watch, setVisibleModal }) {
+export default function Upload({ styles, userImage, watch, setVisibleModal, objDataUrl }) {
     const dropdown = useRef();
     const dropdownToggle = useRef();
 
@@ -27,7 +26,7 @@ export default function Upload({ styles, userImage, watch, setVisibleModal }) {
         <>
             <div className={styles.upload}>
                 <div className={styles.image}>
-                    <Image src={userImage} alt='' width={100} height={100} />
+                    <img src={objDataUrl ? objDataUrl : userImage} alt='' />
                 </div>
                 <div className={styles.dropdownCnt}>
                     <button

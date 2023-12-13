@@ -1,8 +1,8 @@
-export async function validateFields(data) {
-    for (const field in data) {
+export async function validateFields(data, requiredFields) {
+    for (const field of requiredFields) {
         if (!data[field]) {
             const statusText = field.charAt(0).toUpperCase() + field.slice(1) + ' is required';
-            return Promise.resolve(Response.json({ error: statusText }, { status: 400, statusText }));
+            return Promise.resolve(Response.json({ error: statusText }, { status: 400 }));
         }
     }
 }
@@ -13,6 +13,6 @@ export async function validateEmail(email) {
 
     if (!valid) {
         const statusText = 'The email you entered is not valid';
-        return Promise.resolve(Response.json({ error: statusText }, { status: 400, statusText }));
+        return Promise.resolve(Response.json({ error: statusText }, { status: 400 }));
     }
 }

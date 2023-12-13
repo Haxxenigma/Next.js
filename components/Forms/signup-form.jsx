@@ -69,7 +69,7 @@ export default function SignUpForm() {
             router.push(`/users/${data.name}`);
             router.refresh();
         } catch (err) {
-            setError('root', { type: 'root', message: err.response.statusText });
+            setError('root', { type: 'root', message: err.response.data.error });
         }
     };
 

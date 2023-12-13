@@ -5,8 +5,9 @@ import { rm } from 'fs/promises';
 export async function PATCH(req, { params }) {
     const data = await req.json();
     const articleId = params.article;
+    const requiredFields = ['title', 'content', 'tags', 'author'];
 
-    const res = await validateFields(data);
+    const res = await validateFields(data, requiredFields);
     if (res) return res;
 
     const article = await prisma.article.update({
