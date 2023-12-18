@@ -2,6 +2,7 @@
 import Link from 'next/link';
 import styles from './form.module.scss';
 import Submit from '../Forms/FormComponents/submit';
+import { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useRouter } from 'next/navigation';
 import { ImUpload } from 'react-icons/im';
@@ -12,14 +13,16 @@ const fields = [
     {
         id: 'title',
         label: 'Title',
+        required: 'Title is required',
     },
     {
         id: 'tags',
-        label: 'Tags',
+        label: 'Tags (separated by spaces)',
     },
 ];
 
 export default function Form({ onSubmit, article }) {
+    const [objDataUrl, setObjDataUrl] = useState();
     const router = useRouter();
     const {
         register,
@@ -28,6 +31,7 @@ export default function Form({ onSubmit, article }) {
         setError,
         clearErrors,
         formState: {
+            isSubmitSuccessful,
             isSubmitting,
             isDirty,
             errors,
@@ -36,12 +40,20 @@ export default function Form({ onSubmit, article }) {
         defaultValues: {
             title: article ? article.title : '',
             content: article ? article.content : '',
-            tags: article ? article.tags : '',
+            tags: article?.tags[0] ? article.tags.join(' ') : '',
             preview: {},
         },
     });
 
-    const postForm = async (data) => {
+    useEffect(() => {
+        if (watch('preview')[0]) {
+            setObjDataUrl(URL.createObjectURL(watch('preview')[0]));
+        } else {
+            setObjDataUrl(null);
+        }
+    }, [watch('preview')]);
+
+    const submit = async (data) => {
         clearErrors();
         const res = await onSubmit(data);
         if (res.error) {
@@ -52,7 +64,7 @@ export default function Form({ onSubmit, article }) {
     };
 
     return (
-        <form className={styles.form} onSubmit={handleSubmit(postForm)}>
+        <form className={styles.form} onSubmit={handleSubmit(submit)}>
             {fields.map((field, index) => (
                 <div className={`${styles.field} ${errors[field.id] && styles.errors}`} key={index}>
                     <input
@@ -62,7 +74,7 @@ export default function Form({ onSubmit, article }) {
                         type='text'
                         autoComplete='off'
                         {...register(field.id, {
-                            required: `${field.label} is required`,
+                            required: field.required,
                         })}
                     />
                     <div className={styles.label}>{field.label}</div>
@@ -74,7 +86,7 @@ export default function Form({ onSubmit, article }) {
                     className={`${styles.content} ${watch('content') && styles.notEmpty}`}
                     id='content'
                     name='content'
-                    rows={7}
+                    rows='7'
                     {...register('content', {
                         required: 'Content is required',
                     })}
@@ -97,6 +109,8 @@ export default function Form({ onSubmit, article }) {
                                         const type = file[0].type;
                                         if (type !== 'image/png' && type !== 'image/jpeg') {
                                             return 'Only png/jpeg files are valid';
+                                        } else if (file[0].size > 5242880) {
+                                            return 'Please upload an image smaller than 5 MB';
                                         }
                                     }
                                 },
@@ -104,15 +118,18 @@ export default function Form({ onSubmit, article }) {
                         />
                     </label>
                 </div>
-                {watch('preview')[0] && <div className={styles.uploadedImage}>{watch('preview')[0].name}</div>}
+                <div className={styles.uploadedImage}>
+                    <img className={styles.image} src={objDataUrl ? objDataUrl : article?.preview} />
+                </div>
                 {errors.preview && <span className={styles.errors}>{errors.preview.message}</span>}
             </div>
             <div className={styles.field}>
                 <div className={styles.buttons}>
                     <Submit
                         styles={styles}
-                        isSubmitting={isSubmitting}
                         isDirty={isDirty}
+                        isSubmitting={isSubmitting}
+                        isSubmitSuccessful={isSubmitSuccessful}
                         image={<GiCheckMark size={16} />}
                         value={'Submit'}
                     />

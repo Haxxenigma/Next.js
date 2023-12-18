@@ -7,7 +7,7 @@ import styles from './article.module.scss';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
-export default function Article({ article }) {
+export default function Article({ article, user }) {
     const router = useRouter();
     const [isModalVisible, setVisibleModal] = useState(false);
     const options = { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' };
@@ -27,7 +27,7 @@ export default function Article({ article }) {
                     setVisibleModal={setVisibleModal}
                 />
             )}
-            <Links styles={styles} article={article} setVisibleModal={setVisibleModal} />
+            <Links styles={styles} article={article} user={user} setVisibleModal={setVisibleModal} />
             <div className={styles.title}>
                 {article.title}
             </div>
@@ -45,9 +45,16 @@ export default function Article({ article }) {
                 </div>
             </Link>
             <div className={styles.tags}>
-                {article.tags.split(' ').map((tag, index) => (
-                    <Link className={styles.tag} href={''} key={index}>#{tag}</Link>
-                ))}
+                {article.tags[0] ? (
+                    article.tags.map((tag, index) => (
+                        <Link className={styles.tag} href={{
+                            pathname: '/blog',
+                            query: { tags: tag },
+                        }} key={index}>#{tag}</Link>
+                    ))
+                ) : (
+                    <span className={styles.noTags}>No tags</span>
+                )}
             </div>
             {article.preview && (
                 <div className={styles.preview}>

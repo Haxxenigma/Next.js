@@ -4,19 +4,20 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("POSTGRES_URL_NON_POOLING")
+  url      = env("VERCEL_DB")
 }
 
 model Article {
-  id         Int       @id @default(autoincrement())
-  title      String    @db.VarChar(255)
-  content    String    @db.Text
-  tags       String    @db.Text
-  preview    String?   @db.Text
-  createdAt  DateTime? @default(now()) @db.Timestamp(0)
-  updatedAt  DateTime? @default(now()) @db.Timestamp(0)
-  authorName String
-  author     User      @relation(fields: [authorName], references: [name], onDelete: Cascade, map: "Article_ibfk_1")
+  id          Int       @id @default(autoincrement())
+  title       String    @db.VarChar(255)
+  content     String
+  preview     String?
+  createdAt   DateTime? @default(now()) @db.Timestamp(0)
+  updatedAt   DateTime? @default(now()) @db.Timestamp(0)
+  authorName  String
+  previewHash String?   @db.VarChar(255)
+  tags        String[]
+  author      User      @relation(fields: [authorName], references: [name], onDelete: Cascade, map: "Article_ibfk_1")
 
   @@index([authorName], map: "author")
 }
@@ -28,9 +29,11 @@ model User {
   password  String    @db.Char(60)
   image     String?   @default("/media/avatar.svg") @db.VarChar(255)
   birth     DateTime? @db.Date
-  bio       String?   @db.Text
+  bio       String?
   verified  Boolean   @default(false)
   createdAt DateTime? @default(now()) @db.Timestamp(0)
   updatedAt DateTime? @default(now()) @db.Timestamp(0)
-  articles  Article[]
+  imageHash String?   @db.VarChar(255)
+  provider  String    @default("credentials") @db.VarChar(60)
+  Article   Article[]
 }

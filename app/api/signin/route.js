@@ -1,7 +1,6 @@
-import jwt from 'jsonwebtoken';
 import prisma from '@/configs/prisma';
+import authenticate from '@/utils/authenticate';
 import { validateFields } from '@/utils/validators';
-import { cookies } from 'next/headers';
 import { compare } from 'bcrypt';
 
 export async function POST(req) {
@@ -22,11 +21,9 @@ export async function POST(req) {
     });
 
     if (user && await compare(data.password, user.password)) {
-        const token = jwt.sign({ id: user.id }, process.env.JWT_KEY, { expiresIn: '7d' });
-        cookies().set('auth', token, { path: '/', });
+        authenticate(user.id);
         return Response.json({ message: 'Authentication was successful' });
     }
 
-    const statusText = 'Incorrect login or password';
-    return Response.json({ error: statusText }, { status: 401, statusText });
+    return Response.json({ error: 'Incorrect login or password' }, { status: 401 });
 }

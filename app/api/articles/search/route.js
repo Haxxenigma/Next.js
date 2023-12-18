@@ -2,7 +2,7 @@ import prisma from '@/configs/prisma';
 
 export async function GET(req) {
     const searchParams = req.nextUrl.searchParams;
-    const query = searchParams.get('query');
+    const query = searchParams.get('q');
 
     if (!query) return Response.json({});
 
@@ -12,16 +12,18 @@ export async function GET(req) {
                 {
                     title: {
                         contains: query,
+                        mode: 'insensitive',
                     },
                 },
                 {
                     tags: {
-                        contains: query,
+                        has: query,
                     },
                 },
                 {
                     content: {
                         contains: query,
+                        mode: 'insensitive',
                     },
                 },
             ],

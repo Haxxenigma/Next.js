@@ -1,35 +1,27 @@
 'use client';
 import Link from 'next/link';
-import { useStore } from '@/hooks/useStore';
-import { observer } from 'mobx-react';
-import { useEffect } from 'react';
+import { MdArrowBack } from 'react-icons/md';
+import { RiEdit2Fill, RiDeleteBinFill } from 'react-icons/ri'
 
-function Links({ styles, article, setVisibleModal }) {
-    const { userDataStore: { getUserData, userData } } = useStore();
-    const user = userData?.value?.name;
-
-    useEffect(() => {
-        getUserData();
-    }, []);
-
+export default function Links({ styles, article, user, setVisibleModal }) {
     return (
         <div className={styles.links}>
-            <Link className={styles.link} href={'/blog'}>Back</Link>
-            {user === article.authorName && (
+            <Link className={styles.link} href={'/blog'}>
+                <MdArrowBack size={20} /><span>Back</span>
+                <div className={styles.tooltip}>Back</div>
+            </Link>
+            {user && user.name === article.authorName && (
                 <>
-                    <Link className={styles.link} href={`/articles/${article.id}/edit`}>Edit</Link>
-                    <Link
-                        className={styles.link}
-                        href={`/articles/${article.id}/delete`}
-                        onClick={(e) => {
-                            e.preventDefault();
-                            setVisibleModal(true);
-                        }}
-                    >Delete</Link>
+                    <Link className={styles.link} href={`/articles/${article.id}/edit`}>
+                        <RiEdit2Fill size={20} /><span>Edit</span>
+                        <div className={styles.tooltip}>Edit</div>
+                    </Link>
+                    <button type='button' className={styles.link} onClick={() => setVisibleModal(true)}>
+                        <RiDeleteBinFill size={20} /><span>Delete</span>
+                        <div className={styles.tooltip}>Delete</div>
+                    </button>
                 </>
             )}
         </div>
     );
 }
-
-export default observer(Links);

@@ -31,7 +31,7 @@
             display: block;
             padding: 10px 5px;
             color: $mid-85;
-            font-size: 28px;
+            font-size: 24px;
             transition: 0.2s;
 
             &:hover {
@@ -43,7 +43,7 @@
         .author {
             @include flex(flex-start, $gap: 8px);
             width: max-content;
-            padding: 3px 10px;
+            padding: 3px 8px;
             border-radius: 4px;
             transition: 0.2s;
             user-select: none;
@@ -107,6 +107,12 @@
                     color: $fg;
                 }
             }
+
+            .noTags {
+                color: $mid-85;
+                font-size: 14px;
+                cursor: default;
+            }
         }
     }
 
@@ -116,6 +122,8 @@
         max-height: 100px;
         overflow: hidden;
         text-overflow: ellipsis;
+        overflow-wrap: break-word;
+        word-break: break-word;
 
         &::after {
             content: '';

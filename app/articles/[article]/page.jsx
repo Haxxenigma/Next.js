@@ -1,5 +1,6 @@
 import Article from '@/components/Article/article';
 import prisma from '@/configs/prisma';
+import getUser from '@/utils/getUser';
 
 export async function generateMetadata({ params }) {
     const article = await prisma.article.findUnique({
@@ -18,6 +19,7 @@ export async function generateMetadata({ params }) {
 }
 
 export default async function RootArticle({ params }) {
+    const user = await getUser();
     const article = await prisma.article.findUnique({
         where: {
             id: parseInt(params.article),
@@ -32,6 +34,6 @@ export default async function RootArticle({ params }) {
     });
 
     return (
-        <Article article={article} />
+        <Article article={article} user={user} />
     );
 }

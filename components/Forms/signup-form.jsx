@@ -16,9 +16,10 @@ export default function SignUpForm() {
         setError,
         clearErrors,
         formState: {
-            errors,
-            isDirty,
+            isSubmitSuccessful,
             isSubmitting,
+            isDirty,
+            errors,
         },
     } = useForm({
         defaultValues: {
@@ -91,8 +92,9 @@ export default function SignUpForm() {
                 <div className={styles.field}>
                     <Submit
                         styles={styles}
-                        isSubmitting={isSubmitting}
                         isDirty={isDirty}
+                        isSubmitting={isSubmitting}
+                        isSubmitSuccessful={isSubmitSuccessful}
                         image={<FaUserPlus size={20} />}
                         value={'Create account'}
                     />

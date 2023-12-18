@@ -1,5 +1,5 @@
 import prisma from '@/configs/prisma';
-import { compare, genSalt, hash } from 'bcrypt';
+import { compare, hash } from 'bcrypt';
 import { validateFields } from '@/utils/validators';
 
 export async function PATCH(req, { params }) {
@@ -11,8 +11,7 @@ export async function PATCH(req, { params }) {
     if (res) return res;
 
     if (data.password2 !== data.password3) {
-        const statusText = 'Passwords don\'t match';
-        return Response.json({ error: statusText }, { status: 400, statusText });
+        return Response.json({ error: 'Passwords don\'t match' }, { status: 400 });
     }
 
     const user = await prisma.user.findUnique({
@@ -25,8 +24,7 @@ export async function PATCH(req, { params }) {
     });
 
     if (user && await compare(data.password1, user.password)) {
-        const salt = await genSalt(10);
-        const passwordHash = await hash(data.password2, salt);
+        const passwordHash = await hash(data.password2, 10);
 
         await prisma.user.update({
             where: {
@@ -40,6 +38,5 @@ export async function PATCH(req, { params }) {
         return Response.json({ message: 'You changed your password successfully' });
     }
 
-    const statusText = 'Incorrect password';
-    return Response.json({ error: statusText }, { status: 401, statusText });
+    return Response.json({ error: 'Incorrect password' }, { status: 401 });
 }

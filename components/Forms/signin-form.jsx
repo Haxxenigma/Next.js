@@ -1,10 +1,11 @@
 'use client';
-import Link from 'next/link';
 import Image from 'next/image';
 import axios from '@/configs/axios';
 import styles from './form.module.scss';
 import Input from './FormComponents/input';
 import Submit from './FormComponents/submit';
+import genGoogleUrl from '@/utils/generators/genGoogleUrl';
+import genGithubUrl from '@/utils/generators/genGithubUrl';
 import { PiSignInBold } from 'react-icons/pi';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
@@ -30,9 +31,10 @@ export default function SignInForm() {
         setError,
         clearErrors,
         formState: {
-            errors,
-            isDirty,
+            isSubmitSuccessful,
             isSubmitting,
+            isDirty,
+            errors,
         },
     } = useForm({
         defaultValues: {
@@ -48,7 +50,7 @@ export default function SignInForm() {
             router.push(`/users/${data.name}`);
             router.refresh();
         } catch (err) {
-            setError('root', { type: 'root', message: err.response.statusText });
+            setError('root', { type: 'root', message: err.response.data.error });
         }
     };
 
@@ -68,13 +70,14 @@ export default function SignInForm() {
                     />
                 ))}
                 <div className={styles.field}>
-                    <Link className={styles.link} href={'/pwdreset'}>Forgot password?</Link>
+                    <button type='button' className={styles.link}>Forgot password?</button>
                 </div>
                 <div className={styles.field}>
                     <Submit
                         styles={styles}
-                        isSubmitting={isSubmitting}
                         isDirty={isDirty}
+                        isSubmitting={isSubmitting}
+                        isSubmitSuccessful={isSubmitSuccessful}
                         image={<PiSignInBold size={20} />}
                         value={'Sign In'}
                     />
@@ -85,12 +88,20 @@ export default function SignInForm() {
                     <div className={styles.header}>
                         Continue with
                     </div>
-                    <Link className={styles.provider} href={'/auth/google'}>
+                    <button
+                        type='button'
+                        className={styles.provider}
+                        onClick={() => router.push(genGoogleUrl())}
+                    >
                         <Image src={'/media/google.svg'} alt='' width={25} height={25} />
-                    </Link>
-                    <Link className={styles.provider} href={'/auth/github'}>
+                    </button>
+                    <button
+                        type='button'
+                        className={styles.provider}
+                        onClick={() => router.push(genGithubUrl())}
+                    >
                         <Image src={'/media/github.svg'} alt='' width={25} height={25} />
-                    </Link>
+                    </button>
                 </div>
             </form>
         </div>

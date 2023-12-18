@@ -1,6 +1,5 @@
-import path from 'path';
 import prisma from '@/configs/prisma';
-import { put, del } from '@vercel/blob';
+import { post, del } from '@/utils/imgur';
 
 export async function POST(req, { params }) {
     const formData = await req.formData();
@@ -13,26 +12,22 @@ export async function POST(req, { params }) {
         },
         select: {
             image: true,
+            imageHash: true,
         },
     });
 
-    if (user.image !== '/media/avatar.svg') {
-        await del(user.image);
-    }
+    if (user.imageHash) await del(user.imageHash);
 
-    const ext = path.extname(image.name);
-
-    const blob = await put(`${name}-${Date.now()}${ext}`, image, {
-        access: 'public',
-        addRandomSuffix: false,
-    });
+    const buffer = await image.arrayBuffer();
+    const { link, deletehash } = await post(buffer);
 
     await prisma.user.update({
         where: {
             name: name,
         },
         data: {
-            image: blob.url,
+            image: link,
+            imageHash: deletehash,
         },
     });
 
@@ -48,21 +43,23 @@ export async function DELETE(_, { params }) {
         },
         select: {
             image: true,
+            imageHash: true,
         },
     });
 
     if (user.image === '/media/avatar.svg') {
-        const statusText = 'Image already deleted';
-        return Response.json({ error: statusText }, { status: 400 });
+        return Response.json({ error: 'Image already deleted' }, { status: 400 });
     }
 
-    await del(user.image);
+    if (user.imageHash) await del(user.imageHash);
+
     await prisma.user.update({
         where: {
             name: name,
         },
         data: {
             image: '/media/avatar.svg',
+            imageHash: null,
         },
     });
 

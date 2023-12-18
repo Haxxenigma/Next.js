@@ -9,8 +9,15 @@ export const metadata = {
     description: 'Blog page',
 };
 
-export default async function Blog() {
+export default async function Blog({ searchParams }) {
+    const tags = searchParams.tags?.split(' ');
+
     const articles = await prisma.article.findMany({
+        where: tags && {
+            tags: {
+                hasSome: tags,
+            },
+        },
         include: {
             author: {
                 select: {

@@ -1,28 +1,7 @@
-import jwt from 'jsonwebtoken';
 import prisma from '@/configs/prisma';
+import authenticate from '@/utils/authenticate';
 import { validateFields, validateEmail } from '@/utils/validators';
-import { hash, genSalt } from 'bcrypt';
-import { cookies } from 'next/headers';
-
-export async function GET() {
-    const cookie = cookies().get('auth');
-
-    if (!cookie) return Response.json({ auth: false });
-
-    try {
-        const decoded = jwt.verify(cookie.value, process.env.JWT_KEY);
-        const user = await prisma.user.findUniqueOrThrow({
-            where: {
-                id: decoded.id,
-            },
-        });
-        const { password, ...userData } = user;
-        return Response.json(userData);
-    } catch (err) {
-        console.log('ERROR', err)
-        return Response.json({ message: 'Forbidden' }, { status: 403 });
-    }
-}
+import { hash } from 'bcrypt';
 
 export async function POST(req) {
     const data = await req.json();
@@ -35,8 +14,7 @@ export async function POST(req) {
     if (res2) return res2;
 
     if (data.password1 !== data.password2) {
-        const statusText = 'Passwords don\'t match';
-        return Response.json({ error: statusText }, { status: 400 });
+        return Response.json({ error: 'Passwords don\'t match' }, { status: 400 });
     }
 
     const isExist = await prisma.user.findMany({
@@ -60,12 +38,10 @@ export async function POST(req) {
     });
 
     if (isExist.length) {
-        const statusText = 'Name or email already exists';
-        return Response.json({ error: statusText }, { status: 409 });
+        return Response.json({ error: 'Name or email already exists' }, { status: 409 });
     }
 
-    const salt = await genSalt(10);
-    const passwordHash = await hash(data.password1, salt);
+    const passwordHash = await hash(data.password1, 10);
 
     const user = await prisma.user.create({
         data: {
@@ -78,7 +54,6 @@ export async function POST(req) {
         },
     });
 
-    const token = jwt.sign({ id: user.id }, process.env.JWT_KEY, { expiresIn: '7d' });
-    cookies().set('auth', token, { path: '/', });
+    authenticate(user.id);
     return Response.json({ message: 'User created successfully' });
 }

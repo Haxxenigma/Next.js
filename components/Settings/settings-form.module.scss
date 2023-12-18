@@ -109,7 +109,8 @@
             }
         }
 
-        .errors {
+        .errors,
+        .success {
             flex-basis: 40%;
             margin: 8px 0 0 10px;
             padding: 0 8px;
@@ -117,6 +118,11 @@
             border: 1px solid $red;
             border-radius: 4px;
             user-select: none;
+        }
+
+        .success {
+            background-color: $green-1;
+            border: 1px solid $green;
         }
 
         &.errors {
@@ -133,7 +139,7 @@
         }
 
         .submitCnt {
-            @include flex($wrap: wrap, $gap: 20px);
+            @include flex(stretch, $wrap: wrap, $gap: 20px);
 
             .submitBtnCnt {
                 position: relative;
@@ -300,6 +306,8 @@
             border: 1px solid $secondary;
             border-radius: 4px;
             user-select: none;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
     }
 }
@@ -325,7 +333,8 @@
                 margin: 5px 0 0;
             }
 
-            .errors {
+            .errors,
+            .success {
                 flex-basis: 100%;
                 margin: 5px 0 0;
             }

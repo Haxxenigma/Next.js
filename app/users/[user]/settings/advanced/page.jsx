@@ -1,4 +1,3 @@
-import prisma from '@/configs/prisma';
 import Advanced from '@/components/Settings/Advanced/advanced';
 
 export async function generateMetadata({ params }) {
@@ -9,11 +8,5 @@ export async function generateMetadata({ params }) {
 }
 
 export default async function SettingsAdvanced({ params }) {
-    const user = await prisma.user.findUnique({
-        where: {
-            name: params.user,
-        },
-    });
-
-    return <Advanced user={user} />;
+    return <Advanced username={params.user} />;
 }

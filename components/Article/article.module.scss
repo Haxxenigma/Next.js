@@ -8,6 +8,7 @@
         @include flex(flex-start, $gap: 15px);
 
         .link {
+            @include flex($gap: 5px);
             padding: 4px 16px;
             background-color: $fg-1;
             border-radius: 4px;
@@ -20,6 +21,22 @@
             &:active {
                 transition: 0s;
                 background-color: $fg-3;
+            }
+
+            &:nth-child(2) {
+                svg {
+                    color: $primary;
+                }
+            }
+
+            &:nth-child(3) {
+                svg {
+                    color: $red;
+                }
+            }
+
+            .tooltip {
+                display: none;
             }
         }
     }
@@ -35,7 +52,7 @@
         @include flex(flex-start, $gap: 8px);
         padding: 3px 10px;
         width: max-content;
-        border-radius: 4px;
+        border-radius: 8px;
         transition: 0.2s;
 
         &:hover {
@@ -73,10 +90,10 @@
     }
 
     .tags {
-        @include flex(flex-start, $gap: 10px);
+        @include flex(flex-start, $wrap: wrap, $gap: 10px);
+        margin: 15px 10px;
 
         .tag {
-            margin: 15px 0;
             padding: 4px 16px;
             color: $mid-75;
             background-color: $fg-1;
@@ -94,6 +111,12 @@
                 color: $fg;
             }
         }
+
+        .noTags {
+            color: $mid-85;
+            font-size: 14px;
+            cursor: default;
+        }
     }
 
     .preview {
@@ -107,5 +130,26 @@
 
     .content {
         padding: 10px 20px;
+        overflow-wrap: break-word;
+    }
+}
+
+@media screen and (max-width: 400px) {
+    .article {
+        .links {
+            .link {
+                @include tooltip();
+                position: relative;
+                height: 35px;
+
+                span {
+                    display: none;
+                }
+
+                .tooltip {
+                    display: flex;
+                }
+            }
+        }
     }
 }

@@ -16,9 +16,9 @@ export default function About() {
             </div>
             <div className={styles.info}>
                 <p>
-                    This site is designed to learn Next.js, a framework for creating single page applications in React.<br />
-                    This site is not intended for production use, but only for introduction to Next.js.
-                    It implements the following functions:
+                    This site is designed to learn Next.js, a framework for creating single page applications in React.
+                    It is not intended for production use, but only for introduction to Next.js.
+                    This site implements the following functions:
                 </p>
                 <div className={styles.list}>
                     <div className={styles.item}>

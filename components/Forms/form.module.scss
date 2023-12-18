@@ -117,6 +117,13 @@
         &:disabled {
             color: $mid-75;
             filter: grayscale(1);
+
+            &.successfull {
+                filter: grayscale(0);
+                background-color: $green-1;
+                border: 1px solid $green;
+                color: $fg;
+            }
         }
 
         >* {

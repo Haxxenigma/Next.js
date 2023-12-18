@@ -20,7 +20,6 @@
 
         ~.label {
             position: absolute;
-            width: 100%;
             top: 8px;
             left: 17px;
             color: $mid-75;
@@ -39,6 +38,18 @@
             // background-color: $secondary-1;
             // border: 1px solid $secondary;
         }
+    }
+
+    .title {
+        font-size: 28px;
+
+        ~.label {
+            font-size: 28px;
+        }
+    }
+
+    .content {
+        resize: none;
     }
 
     .upload {
@@ -70,24 +81,13 @@
     }
 
     .uploadedImage {
-        margin-top: 8px;
-        padding: 0 16px;
-        background-color: $secondary-1;
-        border: 1px solid $secondary;
-        border-radius: 4px;
-        user-select: none;
-    }
+        @include flex($wrap: wrap);
+        flex-basis: 100%;
+        margin: 15px 0;
 
-    .title {
-        font-size: 28px;
-
-        ~.label {
-            font-size: 28px;
+        .image {
+            width: 50%;
         }
-    }
-
-    .content {
-        resize: none;
     }
 
     .buttons {
@@ -124,6 +124,13 @@
             &:disabled {
                 filter: grayscale(1);
                 color: $mid-75;
+
+                &.successfull {
+                    filter: grayscale(0);
+                    background-color: $green-1;
+                    border: 1px solid $green;
+                    color: $fg;
+                }
             }
         }
 
@@ -147,6 +154,7 @@
     }
 
     .errors {
+        flex-basis: 100%;
         margin-top: 8px;
         padding: 0 16px;
         background-color: $red-1;
@@ -167,6 +175,16 @@
                 &~.label {
                     color: $red;
                 }
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 650px) {
+    .field {
+        .uploadedImage {
+            .image {
+                width: 90%;
             }
         }
     }

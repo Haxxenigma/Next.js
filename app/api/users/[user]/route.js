@@ -1,8 +1,8 @@
 import prisma from '@/configs/prisma';
 import { validateFields, validateEmail } from '@/utils/validators';
 import { cookies } from 'next/headers';
+import { del } from '@/utils/imgur';
 import { compare } from 'bcrypt';
-import { rmSync } from 'fs';
 
 export async function PATCH(req, { params }) {
     const data = await req.json();
@@ -67,8 +67,11 @@ export async function PATCH(req, { params }) {
     });
 
     if (isExist.length) {
-        const statusText = 'Name or email already exists';
-        return Response.json({ error: statusText }, { status: 409 });
+        return Response.json({
+            error: 'Name or email already exists',
+        }, {
+            status: 409,
+        });
     }
 
     data.birth = data.birth ? `${data.birth}T00:00:00.000Z` : null;
@@ -92,9 +95,8 @@ export async function DELETE(req, { params }) {
     const searchParams = req.nextUrl.searchParams;
     const password = searchParams.get('password');
     const name = params.user;
-    const requiredFields = ['name', 'password'];
 
-    const res = await validateFields({ name, password }, requiredFields);
+    const res = await validateFields({ name }, ['name']);
     if (res) return res;
 
     const user = await prisma.user.findUnique({
@@ -103,7 +105,7 @@ export async function DELETE(req, { params }) {
         },
         select: {
             password: true,
-            image: true,
+            imageHash: true,
         },
     });
 
@@ -114,14 +116,11 @@ export async function DELETE(req, { params }) {
             },
         });
 
-        if (user.image !== '/media/avatar.svg') {
-            rmSync(`./public/${user.image}`);
-        }
+        if (user.imageHash) await del(user.imageHash);
 
         cookies().delete('auth');
         return Response.json({ message: 'Account deleted successfully' });
     }
 
-    const statusText = 'Incorrect password';
-    return Response.json({ error: statusText }, { status: 401 });
+    return Response.json({ error: 'Incorrect password' }, { status: 401 });
 }

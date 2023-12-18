@@ -9,14 +9,14 @@ export default function ProfileHeader({ styles, user, viewer }) {
             <div className={styles.imageCnt}>
                 <Link
                     className={styles.image}
-                    href={viewer.name === user.name
+                    href={viewer && viewer.name === user.name
                         ? `/users/${user.name}/settings`
                         : user.image
                     }
                 >
                     <img src={user.image} alt='' />
                 </Link>
-                {viewer.name === user.name && (
+                {viewer && viewer.name === user.name && (
                     <div className={styles.tooltip}>
                         Change your avatar
                     </div>
@@ -39,7 +39,7 @@ export default function ProfileHeader({ styles, user, viewer }) {
                 </div>
             </div>
             <div className={styles.actions}>
-                {viewer.name === user.name && (
+                {viewer && viewer.name === user.name && (
                     <Link className={styles.action} href={`/users/${user.name}/settings`}>
                         <IoSettings />
                         <div className={styles.tooltip}>

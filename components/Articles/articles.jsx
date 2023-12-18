@@ -32,9 +32,16 @@ export default function Articles({ articles }) {
                             </div>
                         </Link>
                         <div className={styles.tags}>
-                            {article.tags.split(' ', 3).map((tag, index) => (
-                                <Link className={styles.tag} href={''} key={index}>#{tag}</Link>
-                            ))}
+                            {article.tags[0] ? (
+                                article.tags.map((tag, index) => (
+                                    <Link className={styles.tag} href={{
+                                        pathname: '/blog',
+                                        query: { tags: tag },
+                                    }} key={index}>#{tag}</Link>
+                                ))
+                            ) : (
+                                <span className={styles.noTags}>No tags</span>
+                            )}
                         </div>
                         <div className={styles.content}>
                             {article.content}

@@ -29,6 +29,9 @@
         user-select: none;
 
         .name {
+            max-width: 200px;
+            overflow: hidden;
+            text-overflow: ellipsis;
             font-size: 24px;
         }
 
@@ -137,7 +140,7 @@
             z-index: 1;
 
             .tooltip {
-                bottom: 110%;
+                bottom: 105%;
                 top: auto;
 
                 &:after {
@@ -149,8 +152,11 @@
         }
 
         .actions {
-            width: 100%;
-            justify-content: space-around;
+            width: 80%;
+            right: 50%;
+            transform: translateX(50%);
+            justify-content: space-between;
+            flex-direction: row-reverse;
         }
     }
 }

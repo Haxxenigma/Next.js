@@ -6,13 +6,16 @@ import Submit from '@/components/Forms/FormComponents/submit';
 import { GiCheckMark } from 'react-icons/gi';
 import { FaXmark } from 'react-icons/fa6';
 import { useForm } from 'react-hook-form';
+import { useState } from 'react';
 
-export default function Password({ user }) {
+export default function Password({ username }) {
+    const [success, setSuccess] = useState(null);
     const {
         register,
         handleSubmit,
         setError,
         watch,
+        reset,
         formState: {
             isSubmitting,
             isDirty,
@@ -48,9 +51,11 @@ export default function Password({ user }) {
 
     const changePwd = async (data) => {
         try {
-            await axios.patch(`/users/${user.name}/password`, data);
+            const res = await axios.patch(`/users/${username}/password`, data);
+            setSuccess(res.data.message);
+            reset();
         } catch (err) {
-            setError('root', { type: 'root', message: err.response.statusText });
+            setError('root', { type: 'root', message: err.response.data.error });
         }
     };
 
@@ -87,14 +92,14 @@ export default function Password({ user }) {
                         <div className={styles.submitBtnCnt}>
                             <Submit
                                 styles={styles}
-                                isSubmitting={isSubmitting}
                                 isDirty={isDirty}
+                                isSubmitting={isSubmitting}
                                 image={<GiCheckMark size={16} />}
                                 value={'Change'}
                             />
                         </div>
                         <div className={styles.submitBtnCnt}>
-                            <Link href={`/users/${user.name}`}><FaXmark size={20} />Cancel</Link>
+                            <Link href={`/users/${username}`}><FaXmark size={20} />Cancel</Link>
                         </div>
                     </div>
                     <div className={styles.label} />
@@ -103,6 +108,12 @@ export default function Password({ user }) {
                     {errors.root && <span className={styles.errors}>{errors.root.message}</span>}
                     <div className={styles.label} />
                 </div>
+                {success && (
+                    <div className={styles.field}>
+                        <span className={styles.success}>{success}</span>
+                        <div className={styles.label} />
+                    </div>
+                )}
             </div>
         </form>
     );

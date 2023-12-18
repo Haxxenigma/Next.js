@@ -1,19 +1,8 @@
 'use client';
 import Form from './form';
 import axios from '@/configs/axios';
-import { useEffect } from 'react';
-import { useStore } from '@/hooks/useStore';
-import { observer } from 'mobx-react';
 
-function PostForm() {
-    const { userDataStore: { getUserData, userData } } = useStore();
-
-    useEffect(() => {
-        getUserData();
-    }, []);
-
-    const author = userData?.value?.name;
-
+export default function PostForm({ author }) {
     const onSubmit = async (data) => {
         try {
             const { preview, ...postData } = data;
@@ -21,7 +10,7 @@ function PostForm() {
 
             if (preview.length) {
                 const formData = new FormData();
-                formData.append('preview', preview[0]);
+                formData.set('preview', preview[0]);
 
                 await axios.post(`/articles/${res.data.id}/image`, formData, {
                     headers: {
@@ -31,11 +20,9 @@ function PostForm() {
             }
             return res.data;
         } catch (err) {
-            return { error: err.response.statusText };
+            return { error: err.response.data.error };
         }
     };
 
     return <Form onSubmit={onSubmit} />;
 }
-
-export default observer(PostForm);

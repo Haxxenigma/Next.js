@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import axios from '@/configs/axios';
+import useDebounce from '@/hooks/useDebounce';
 import { useEffect, useRef, useState } from 'react';
 import { usePathname } from 'next/navigation';
 import { IoMdSearch } from 'react-icons/io';
@@ -8,15 +9,21 @@ import { FaXmark } from 'react-icons/fa6';
 
 export default function Search({ styles }) {
     const [isModalVisible, setIsModalVisible] = useState(false);
-    const [articles, setArticles] = useState();
+    const [latestArticles, setLatestArticles] = useState(null);
+    const [articles, setArticles] = useState(null);
     const [query, setQuery] = useState('');
-    const searchModal = useRef();
+    const debouncedQuery = useDebounce(query, 500);
     const pathname = usePathname();
+    const searchModal = useRef();
 
     useEffect(() => {
-        if (query) fetchByQuery();
-        else fetchLatest();
-    }, [query]);
+        fetchLatest();
+    }, []);
+
+    useEffect(() => {
+        if (debouncedQuery) fetchByQuery(debouncedQuery);
+        else setArticles(latestArticles);
+    }, [debouncedQuery, latestArticles]);
 
     useEffect(() => {
         setIsModalVisible(false);
@@ -27,12 +34,12 @@ export default function Search({ styles }) {
     }, [isModalVisible]);
 
     const fetchLatest = async () => {
-        const res = await axios.get('/articles');
-        setArticles(res.data.articles);
+        const res = await axios.get('/articles/latest');
+        setLatestArticles(res.data.articles);
     };
 
-    const fetchByQuery = async () => {
-        const res = await axios.get('search', { params: { query } });
+    const fetchByQuery = async (q) => {
+        const res = await axios.get('/articles/search', { params: { q } });
         setArticles(res.data.articles);
     };
 
@@ -85,11 +92,11 @@ export default function Search({ styles }) {
                         </div>
                     ) : (
                         <div className={styles.notFound}>
-                            No results found for <span>'{query}'</span>
+                            No articles found {query && <>for <span>'{query}'</span></>}
                         </div>
                     )}
                 </div>
             </div>
         </>
-    )
+    );
 }

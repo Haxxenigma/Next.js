@@ -3,7 +3,7 @@ import { validateFields } from '@/utils/validators';
 
 export async function POST(req) {
     const data = await req.json();
-    const requiredFields = ['title', 'content', 'tags', 'author'];
+    const requiredFields = ['title', 'content', 'author'];
 
     const res = await validateFields(data, requiredFields);
     if (res) return res;
@@ -12,7 +12,7 @@ export async function POST(req) {
         data: {
             title: data.title,
             content: data.content,
-            tags: data.tags,
+            tags: data.tags?.split(' '),
             authorName: data.author,
         },
         select: {
@@ -21,15 +21,4 @@ export async function POST(req) {
     });
 
     return Response.json({ id: article.id });
-}
-
-export async function GET() {
-    const articles = await prisma.article.findMany({
-        take: 5,
-        orderBy: {
-            createdAt: 'desc',
-        },
-    });
-
-    return Response.json({ articles });
 }

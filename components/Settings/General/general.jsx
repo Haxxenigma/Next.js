@@ -44,6 +44,8 @@ const fields = [
                 const type = file[0].type;
                 if (type !== 'image/png' && type !== 'image/jpeg') {
                     return 'Only png/jpeg files are valid';
+                } else if (file[0].size > 5242880) {
+                    return 'Please upload an image smaller than 5 MB';
                 }
             }
         },
@@ -101,6 +103,7 @@ export default function General({ user }) {
         try {
             clearErrors();
             await axios.delete(`/users/${user.name}/avatar`);
+            setVisibleModal(false);
             router.refresh();
         } catch (err) {
             setError('root', { type: 'root', message: err.response.data.error });
@@ -114,7 +117,7 @@ export default function General({ user }) {
             data.name = data.name.replace(/[^a-zA-Z0-9_]/g, '_');
             await axios.patch(`/users/${user.name}`, data);
             if (data.image.length) await postAvatar(data.image[0], data.name);
-            router.push(`/users/${data.name}/settings`);
+            router.replace(`/users/${data.name}/settings`);
             router.refresh();
         } catch (err) {
             setError('root', { type: 'root', message: err.response.data.error });
@@ -174,8 +177,8 @@ export default function General({ user }) {
                             <div className={styles.submitBtnCnt}>
                                 <Submit
                                     styles={styles}
-                                    isSubmitting={isSubmitting}
                                     isDirty={isDirty}
+                                    isSubmitting={isSubmitting}
                                     image={<GiCheckMark size={16} />}
                                     value={'Save'}
                                 />

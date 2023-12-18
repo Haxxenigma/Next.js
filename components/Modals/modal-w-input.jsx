@@ -14,6 +14,7 @@ export default function ModalWInput({ setVisibleModal, username }) {
         setError,
         clearErrors,
         formState: {
+            isSubmitSuccessful,
             isSubmitting,
             isDirty,
             errors,
@@ -41,7 +42,7 @@ export default function ModalWInput({ setVisibleModal, username }) {
             router.push('/');
             router.refresh();
         } catch (err) {
-            setError('password', { type: 'password', message: err.response.statusText });
+            setError('password', { type: 'password', message: err.response.data.error });
         }
     };
 
@@ -71,8 +72,9 @@ export default function ModalWInput({ setVisibleModal, username }) {
                     </button>
                     <Submit
                         styles={styles}
-                        isSubmitting={isSubmitting}
                         isDirty={isDirty}
+                        isSubmitting={isSubmitting}
+                        isSubmitSuccessful={isSubmitSuccessful}
                         image={<GiCheckMark size={16} />}
                         value={'Submit'}
                     />

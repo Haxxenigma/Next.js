@@ -1,11 +1,11 @@
 import prisma from '@/configs/prisma';
 import { validateFields } from '@/utils/validators';
-import { rm } from 'fs/promises';
+import { del } from '@/utils/imgur';
 
 export async function PATCH(req, { params }) {
     const data = await req.json();
     const articleId = params.article;
-    const requiredFields = ['title', 'content', 'tags', 'author'];
+    const requiredFields = ['title', 'content', 'author'];
 
     const res = await validateFields(data, requiredFields);
     if (res) return res;
@@ -14,7 +14,7 @@ export async function PATCH(req, { params }) {
         data: {
             title: data.title,
             content: data.content,
-            tags: data.tags,
+            tags: data.tags?.split(' '),
             authorName: data.author,
         },
         select: {
@@ -28,21 +28,19 @@ export async function PATCH(req, { params }) {
     return Response.json({ id: article.id });
 }
 
-export async function DELETE(req, { params }) {
-    const searchParams = req.nextUrl.searchParams;
-    const preview = searchParams.get('preview');
+export async function DELETE(_, { params }) {
     const articleId = params.article;
 
-    const res = await prisma.article.delete({
+    const article = await prisma.article.delete({
         where: {
             id: parseInt(articleId),
         },
         select: {
-            id: true,
+            previewHash: true,
         },
     });
 
-    if (preview) await rm(`public/${preview}`);
+    if (article.previewHash) await del(article.previewHash);
 
-    return Response.json({ success: true, res });
+    return Response.json({ message: 'You have successfully deleted the article' });
 }
