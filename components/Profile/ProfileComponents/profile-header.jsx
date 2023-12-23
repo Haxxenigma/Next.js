@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { IoMdChatboxes } from 'react-icons/io';
 import { IoSettings } from 'react-icons/io5';
 
 export default function ProfileHeader({ styles, user, viewer }) {
@@ -44,6 +45,14 @@ export default function ProfileHeader({ styles, user, viewer }) {
                         <IoSettings />
                         <div className={styles.tooltip}>
                             Settings
+                        </div>
+                    </Link>
+                )}
+                {user && (
+                    <Link className={styles.action} href={'/chats'}>
+                        <IoMdChatboxes />
+                        <div className={styles.tooltip}>
+                            Chat
                         </div>
                     </Link>
                 )}

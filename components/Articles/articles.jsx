@@ -7,7 +7,7 @@ export default function Articles({ articles }) {
 
     return (
         <div className={styles.articles}>
-            {articles.map((article, index) => (
+            {articles?.map((article, index) => (
                 <div className={styles.article} key={index}>
                     <div className={styles.stack}>
                         {article.preview && (

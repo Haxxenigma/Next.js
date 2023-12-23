@@ -1,0 +1,238 @@
+@import 'vars';
+@import 'mixins';
+
+.wrapper {
+    @include flex();
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    background-color: $bg-5;
+    z-index: 2;
+
+    .form {
+        @include flex(flex-start, $dir: column);
+        position: relative;
+        padding: 12px 40px 16px;
+        background-color: $bg-8;
+        box-shadow: 0 0 10px $fg-3;
+        border-radius: 8px;
+
+        .title {
+            @include flex(flex-start);
+            width: 100%;
+            padding: 8px 6px;
+
+            span {
+                color: $mid-85;
+                font-size: 20px;
+                font-weight: 600;
+            }
+        }
+
+        .closeModal {
+            @include flex();
+            position: absolute;
+            padding: 4px;
+            top: 16px;
+            right: 16px;
+            color: $mid-75;
+            border-radius: 8px;
+            transition: 0.2s;
+
+            &:hover {
+                color: $fg;
+                background-color: $fg-1;
+            }
+        }
+
+        .box {
+            @include flex();
+
+            .file {
+                width: 0;
+                height: 0;
+                scale: 0;
+            }
+
+            .upload {
+                @include flex();
+                width: 60px;
+                min-width: 60px;
+                height: 60px;
+                background-color: $fg-1;
+                border-radius: 50%;
+                overflow: hidden;
+                cursor: pointer;
+
+                img {
+                    width: 100%;
+                    height: auto;
+                }
+
+                >* {
+                    pointer-events: none;
+                }
+            }
+
+            .input {
+                flex-basis: 100%;
+                height: 40px;
+                margin-left: 10px;
+                padding: 0 10px;
+                background-color: $fg-1;
+                border: 1px solid transparent;
+                border-radius: 8px;
+
+                &.error {
+                    border: 1px solid $red;
+
+                    &::placeholder {
+                        color: $red;
+                    }
+                }
+            }
+
+            .cancel,
+            .submit {
+                @include flex($gap: 5px);
+                padding: 4px 16px;
+                background-color: $fg-1;
+                border: 1px solid $fg;
+                border-radius: 4px;
+                transition: 0.2s;
+
+                &:hover {
+                    background-color: $fg-2;
+                }
+
+                &:active {
+                    transition: 0s;
+                    background-color: $fg-3;
+                }
+            }
+
+            .submit {
+                @include loader();
+                background-color: $primary-1;
+                border: 1px solid $primary;
+
+                &:hover {
+                    background-color: $primary-2;
+                }
+
+                &:active {
+                    transition: 0s;
+                    background-color: $primary-3;
+                }
+
+                &:disabled {
+                    color: $mid;
+                    filter: grayscale(1);
+
+                    &.successfull {
+                        filter: grayscale(0);
+                        background-color: $green-1;
+                        border: 1px solid $green;
+                        color: $fg;
+                    }
+                }
+            }
+
+            .cancel {
+                margin-right: 20px;
+            }
+        }
+
+        .select {
+            flex-grow: 1;
+            width: 100%;
+
+            .head {
+                @include flex(flex-start, $gap: 5px);
+                color: $mid-85;
+                font-size: 18px;
+                margin: 12px 6px 0;
+            }
+
+            .options {
+                @include flex(flex-start, $dir: column);
+                width: 95%;
+                max-height: 200px;
+                margin: auto;
+                overflow: scroll;
+
+                .option {
+                    @include flex(flex-start, $gap: 5px);
+                    width: 100%;
+                    height: 50px;
+                    min-height: 50px;
+                    margin: 5px 0;
+                    padding: 0 10px;
+                    background-color: $fg-1;
+                    border-radius: 4px;
+                    transition: 0.2s;
+                    cursor: pointer;
+
+                    &:hover {
+                        background-color: $fg-2;
+                    }
+
+                    &:active {
+                        transition: 0s;
+                        background-color: $fg-3;
+                        scale: 0.99;
+                    }
+
+                    input[type='checkbox'] {
+                        @include flex();
+                        width: 20px;
+                        height: 20px;
+                        margin-right: 5px;
+                        background-color: $fg-1;
+                        border-radius: 4px;
+                        border: none;
+                        appearance: none;
+
+                        &:after {
+                            @include flex();
+                            content: '';
+                            font-size: 18px;
+                        }
+
+                        &:checked {
+                            &:after {
+                                content: '\2713';
+                            }
+                        }
+                    }
+
+                    .imageCnt {
+                        @include flex();
+                        width: 35px;
+                        height: 35px;
+                        border-radius: 50%;
+                        overflow: hidden;
+
+                        .image {
+                            width: 100%;
+                            height: auto;
+                        }
+                    }
+
+                    >* {
+                        pointer-events: none;
+                        user-select: none;
+                    }
+                }
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 700px) {
+    .wrapper .form {
+        padding: 12px 16px 16px;
+    }
+}

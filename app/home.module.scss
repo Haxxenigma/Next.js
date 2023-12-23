@@ -5,7 +5,6 @@
     @include flex($y: flex-start, $dir: column);
     flex-grow: 1;
     padding: 20px 40px;
-    cursor: default;
 
     .title {
         h1 {

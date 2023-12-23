@@ -1,0 +1,154 @@
+@import 'vars';
+@import 'mixins';
+
+.wrapper {
+    @include flex();
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    background-color: $bg-5;
+    z-index: 1;
+
+    .modal {
+        @include flex(flex-start, $dir: column);
+        position: relative;
+        padding: 12px 40px;
+        background-color: $bg-8;
+        box-shadow: 0 0 10px $fg-3;
+        border-radius: 8px;
+
+        .title {
+            @include flex(flex-start);
+            width: 100%;
+            padding: 8px 0;
+            color: $mid-85;
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .closeModal {
+            @include flex();
+            position: absolute;
+            padding: 4px;
+            top: 16px;
+            right: 16px;
+            color: $mid-85;
+            border-radius: 8px;
+            transition: 0.2s;
+
+            &:hover {
+                color: $fg;
+                background-color: $fg-1;
+            }
+        }
+
+        .header {
+            @include flex(flex-start, $gap: 6px);
+            position: relative;
+            width: 350px;
+            font-size: 22px;
+            font-weight: 500;
+
+            .imageCnt {
+                @include flex();
+                width: 70px;
+                height: 70px;
+                background-color: $fg-1;
+                border-radius: 50%;
+                overflow: hidden;
+
+                .image {
+                    width: 100%;
+                    height: auto;
+                }
+            }
+
+            .edit,
+            .delete {
+                @include tooltip();
+                @include flex();
+                position: absolute;
+                top: 50%;
+                padding: 4px;
+                color: $mid-75;
+                border-radius: 4px;
+                transform: translateY(-50%);
+                transition: 0.2s;
+
+                &:hover {
+                    color: $fg;
+                    background-color: $fg-1;
+                }
+            }
+
+            .edit {
+                right: 0;
+            }
+
+            .delete {
+                right: 50px;
+            }
+        }
+
+        .subtitle {
+            @include flex(flex-start, $gap: 5px);
+            width: 100%;
+            padding: 12px 4px 4px;
+            color: $mid-75;
+            font-size: 18px;
+            font-weight: 500;
+        }
+
+        .members {
+            @include flex(flex-start, $dir: column);
+            width: 100%;
+            max-height: 250px;
+            overflow: auto;
+
+            .member {
+                @include flex(flex-start);
+                width: 95%;
+                margin: 4px 0;
+                padding: 4px 8px;
+                background-color: $fg-1;
+                border-radius: 8px;
+                transition: 0.2s;
+
+                &:hover {
+                    background-color: $fg-2
+                }
+
+                &:active {
+                    transition: 0s;
+                    background-color: $fg-3
+                }
+
+                .imageCnt {
+                    @include flex();
+                    width: 40px;
+                    height: 40px;
+                    margin-right: 5px;
+                    border-radius: 50%;
+                    overflow: hidden;
+
+                    .image {
+                        width: 100%;
+                        height: auto;
+                    }
+                }
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 700px) {
+    .wrapper .modal {
+        padding: 12px 16px 16px;
+
+        .header {
+            width: 300px;
+        }
+    }
+}

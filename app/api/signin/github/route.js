@@ -1,4 +1,4 @@
-import genRandString from '@/utils/genRandString';
+import genRandString from '@/utils/generators/genRandString';
 import authenticate from '@/utils/authenticate';
 import prisma from '@/configs/prisma';
 import axios from '@/configs/axios';

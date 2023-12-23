@@ -1,0 +1,291 @@
+@import 'vars';
+@import 'mixins';
+
+.wrapper {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    grid-template-rows: 1fr;
+    padding: 10px 0;
+}
+
+.forbidden {
+    @include flex();
+
+    >div {
+        padding: 4px 12px;
+        background-color: $fg-1;
+        border-radius: 8px;
+        color: $mid-85;
+
+        >* {
+            text-align: center;
+        }
+    }
+}
+
+.chat {
+    @include flex($dir: column);
+    height: calc(100vh - 60px - 60px - 20px);
+    min-height: calc(100vh - 60px - 60px - 20px);
+
+    .empty {
+        @include flex();
+        width: 100%;
+        height: 100%;
+
+        span {
+            padding: 2px 12px;
+            background-color: $fg-1;
+            border-radius: 8px;
+            color: $mid-75;
+        }
+    }
+
+    .header {
+        @include flex(flex-start);
+        position: relative;
+        width: 100%;
+        height: 62px;
+        min-height: 62px;
+        padding: 0 10px;
+        background-color: $fg-1;
+        border-bottom-right-radius: 16px;
+        border-top-right-radius: 16px;
+        border-left: 1px solid $fg-1;
+        transition: 0.2s;
+
+        .back {
+            @include flex();
+            width: 40px;
+            height: 80%;
+            border-radius: 8px;
+            transition: 0.2s;
+
+            &:hover {
+                background-color: $fg-1;
+            }
+        }
+
+        .headerBtn {
+            @include flex(flex-start);
+            flex-grow: 1;
+            height: 100%;
+            padding: 0 10px;
+        }
+
+        .imageCnt {
+            @include flex();
+            background-color: $fg-1;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            overflow: hidden;
+
+            .image {
+                width: 100%;
+                height: auto;
+            }
+        }
+
+        .name {
+            margin-left: 10px;
+            font-weight: 500;
+        }
+
+        &:hover {
+            background-color: $fg-2;
+        }
+
+        .leave {
+            @include flex();
+            @include tooltip();
+            position: absolute;
+            top: 50%;
+            right: 20px;
+            padding: 8px;
+            color: $mid-85;
+            border-radius: 8px;
+            transform: translateY(-50%);
+            transition: 0.2s;
+
+            .tooltip {
+                top: auto;
+                left: -140%;
+            }
+
+            &:hover {
+                background-color: $fg-1;
+            }
+        }
+    }
+
+    .body {
+        width: 100%;
+        flex-grow: 1;
+        padding: 5px 10px;
+        overflow-y: scroll;
+
+        .messageCnt {
+            @include flex(flex-start, flex-end, $gap: 10px);
+            margin-top: 15px;
+            margin-right: 50px;
+
+            &.author {
+                justify-content: flex-end;
+                margin-left: 50px;
+                margin-right: 0;
+
+                .imageCnt {
+                    order: 1;
+                }
+
+                .message {
+                    background-color: $primary-1;
+
+                    .column .author {
+                        color: $primary;
+                    }
+                }
+            }
+
+            .imageCnt {
+                @include flex();
+                width: 40px;
+                min-width: 40px;
+                height: 40px;
+                border-radius: 50%;
+                overflow: hidden;
+
+                .image {
+                    width: 100%;
+                    height: auto
+                }
+            }
+
+            .message {
+                @include flex(flex-start, flex-end);
+                padding: 8px 12px;
+                background-color: $fg-1;
+                border-radius: 8px;
+
+                .column {
+                    @include flex(flex-start, flex-start, $dir: column);
+
+                    .author {
+                        @include flex(flex-start);
+                        width: 100%;
+                        font-weight: 600;
+                        color: $secondary;
+                    }
+
+                    .text {
+                        font-weight: 200;
+                    }
+                }
+
+                .time {
+                    margin-left: 8px;
+                    color: $mid-75;
+                    font-size: 10px;
+                }
+            }
+        }
+    }
+
+    .form {
+        @include flex();
+        position: relative;
+        width: 100%;
+        padding: 10px;
+
+        .input {
+            height: 50px;
+            flex-basis: 100%;
+            padding: 0 60px 0 15px;
+            background-color: $fg-1;
+            border-radius: 12px;
+        }
+
+        .submit {
+            @include flex();
+            position: absolute;
+            padding: 5px 10px;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            border-radius: 8px;
+            transition: 0.2s;
+
+            &:hover {
+                background-color: $fg-1;
+            }
+
+            &:disabled {
+                color: $mid;
+            }
+        }
+
+        .refresh {
+            @include flex();
+            margin-right: 8px;
+            padding: 6px;
+            background-color: $fg-1;
+            border-radius: 8px;
+            transition: 0.2s;
+
+            &:hover {
+                background-color: $fg-2;
+            }
+
+            &:disabled {
+                color: $mid;
+
+                svg {
+                    animation: rotate 0.5s infinite linear;
+
+                    @keyframes rotate {
+                        from {
+                            rotate: 0deg;
+                        }
+
+                        to {
+                            rotate: 360deg;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 700px) {
+    .wrapper {
+        grid-template-columns: 1fr;
+        padding: 0;
+    }
+
+    .initial {
+        display: none;
+    }
+
+    .chat {
+        height: calc(100vh - 60px - 60px);
+        min-height: calc(100vh - 60px - 60px);
+
+        .header {
+            border-radius: 0;
+        }
+
+        .body .messageCnt {
+            .imageCnt {
+                width: 25px;
+                min-width: 25px;
+                height: 25px;
+            }
+
+            .message {
+                padding: 4px 6px;
+            }
+        }
+    }
+}

@@ -7,6 +7,7 @@ import { FaUserCircle, FaUserCog, FaSignOutAlt } from 'react-icons/fa';
 import { TiArrowSortedDown } from 'react-icons/ti';
 import { PiSignInBold } from 'react-icons/pi';
 import { FaUserPlus } from 'react-icons/fa6';
+import { IoMdChatboxes } from 'react-icons/io';
 import { useEffect, useRef, useState } from 'react';
 import { usePathname } from 'next/navigation';
 
@@ -26,6 +27,10 @@ export default function NavRight({ styles, user }) {
         {
             path: `/users/${user?.name}/settings`,
             value: <><FaUserCog size={20} />Settings</>,
+        },
+        {
+            path: `/chats`,
+            value: <><IoMdChatboxes size={20} />Chat</>,
         },
         {
             path: '/signout',
@@ -51,7 +56,7 @@ export default function NavRight({ styles, user }) {
             <Search styles={styles} />
             {user ? (
                 <div className={styles.dropdownCnt}>
-                    <div
+                    <button
                         className={styles.dropdownBtn}
                         ref={dropdownBtn}
                         onMouseDown={(e) => {
@@ -69,7 +74,7 @@ export default function NavRight({ styles, user }) {
                         <div className={`${styles.arrow} ${isDropdownExpanded && styles.active}`}>
                             <TiArrowSortedDown />
                         </div>
-                    </div>
+                    </button>
                     <div className={styles.dropdown} ref={dropdown}>
                         {links.map((link, index) => (
                             <DropwdownLink

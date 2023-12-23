@@ -268,7 +268,6 @@
             right: 20px;
             color: $mid-75;
             transition: 0.2s;
-            cursor: pointer;
 
             &:hover {
                 color: $fg;
@@ -338,11 +337,6 @@
         padding: 0 5px;
         border-radius: 8px;
         transition: 0.2s;
-        cursor: pointer;
-
-        >* {
-            pointer-events: none;
-        }
 
         &:hover {
             background-color: $fg-1;
@@ -431,7 +425,6 @@
             color: $mid-75;
             border-radius: 4px;
             transition: 0.2s;
-            cursor: pointer;
 
             &:hover {
                 color: $fg;

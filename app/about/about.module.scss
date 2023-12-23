@@ -5,7 +5,6 @@
     @include flex($dir: column);
     flex-grow: 1;
     padding: 20px;
-    cursor: default;
 
     .header {
         @include flex(flex-start);

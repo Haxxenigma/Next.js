@@ -15,29 +15,16 @@ export default async function User({ params }) {
         where: {
             name: params.user,
         },
+        include: {
+            articles: true,
+        },
     });
 
     if (!user) return notFound();
 
     const viewer = await getUser();
 
-    const articles = await prisma.article.findMany({
-        where: {
-            authorName: params.user,
-        },
-        include: {
-            author: {
-                select: {
-                    image: true,
-                },
-            },
-        },
-        orderBy: {
-            createdAt: 'desc',
-        },
-    });
-
     return (
-        <Profile user={user} viewer={viewer} articles={articles} />
+        <Profile user={user} viewer={viewer} />
     );
 }

@@ -8,32 +8,56 @@ datasource db {
 }
 
 model Article {
-  id          Int       @id @default(autoincrement())
-  title       String    @db.VarChar(255)
+  id          Int      @id @default(autoincrement())
+  title       String
   content     String
   preview     String?
-  createdAt   DateTime? @default(now()) @db.Timestamp(0)
-  updatedAt   DateTime? @default(now()) @db.Timestamp(0)
-  authorName  String
-  previewHash String?   @db.VarChar(255)
+  previewHash String?
   tags        String[]
-  author      User      @relation(fields: [authorName], references: [name], onDelete: Cascade, map: "Article_ibfk_1")
+  authorName  String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  author      User     @relation(fields: [authorName], references: [name], onDelete: Cascade)
 
   @@index([authorName], map: "author")
 }
 
 model User {
   id        Int       @id @default(autoincrement())
-  name      String    @unique(map: "name") @db.VarChar(255)
-  email     String    @unique(map: "email") @db.VarChar(255)
-  password  String    @db.Char(60)
-  image     String?   @default("/media/avatar.svg") @db.VarChar(255)
-  birth     DateTime? @db.Date
+  name      String    @unique(map: "name")
+  email     String    @unique(map: "email")
+  password  String
+  image     String?   @default("/media/avatar.svg")
+  imageHash String?
+  birth     DateTime?
   bio       String?
   verified  Boolean   @default(false)
-  createdAt DateTime? @default(now()) @db.Timestamp(0)
-  updatedAt DateTime? @default(now()) @db.Timestamp(0)
-  imageHash String?   @db.VarChar(255)
-  provider  String    @default("credentials") @db.VarChar(60)
-  Article   Article[]
+  provider  String    @default("credentials")
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  articles  Article[]
+  messages  Message[]
+  chats     Chat[]    @relation("ChatToUser")
+}
+
+model Chat {
+  id        Int       @id @default(autoincrement())
+  name      String
+  image     String?   @default("/media/chat.svg")
+  imageHash String?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  messages  Message[]
+  members   User[]    @relation("ChatToUser")
+}
+
+model Message {
+  id         Int      @id @default(autoincrement())
+  text       String
+  chatId     Int
+  authorName String   @default("deleted")
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  author     User     @relation(fields: [authorName], references: [name], onDelete: SetDefault)
+  chat       Chat     @relation(fields: [chatId], references: [id], onDelete: Cascade)
 }

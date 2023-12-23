@@ -18,6 +18,7 @@
     color: inherit;
     box-sizing: border-box;
     background-color: transparent;
+    cursor: default;
 }
 
 html,
@@ -30,6 +31,16 @@ body {
 a,
 button {
     cursor: pointer;
+
+    >* {
+        pointer-events: none;
+    }
+}
+
+input[type='text'],
+input[type='password'],
+textarea {
+    cursor: text;
 }
 
 ::-webkit-scrollbar {

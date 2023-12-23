@@ -74,9 +74,9 @@ export default function Search({ styles }) {
                         placeholder='Search...'
                         onChange={(e) => setQuery(e.target.value)}
                     />
-                    <div className={styles.closeModal} onClick={() => setIsModalVisible(false)}>
+                    <button className={styles.closeModal} onClick={() => setIsModalVisible(false)}>
                         <FaXmark size={24} />
-                    </div>
+                    </button>
                     {articles?.length ? (
                         <div className={styles.results}>
                             {articles?.map((article, index) => (

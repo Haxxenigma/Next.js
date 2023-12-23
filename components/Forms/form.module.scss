@@ -18,10 +18,7 @@
 
 .title {
     flex-basis: 100%;
-    background-image: linear-gradient(45deg, $primary 0%, $primary-7 25%);
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    user-select: none;
+    color: $primary;
 
     h1 {
         font-size: 36px;
@@ -36,7 +33,6 @@
     .label {
         margin-top: 15px;
         color: $mid;
-        pointer-events: none;
         transition: 0.2s;
         order: -1;
     }
@@ -125,10 +121,6 @@
                 color: $fg;
             }
         }
-
-        >* {
-            pointer-events: none;
-        }
     }
 }
 
@@ -166,15 +158,15 @@
         }
 
         &:nth-child(3) {
-            background-color: $fg-1;
+            background-color: $fg-2;
 
             &:hover {
-                background-color: $fg-2;
+                background-color: $fg-3;
             }
 
             &:active {
                 transition: 0s;
-                background-color: $fg-3;
+                background-color: $fg-4;
             }
         }
     }

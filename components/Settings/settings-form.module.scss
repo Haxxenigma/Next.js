@@ -30,7 +30,6 @@
             color: $mid-75;
             text-align: right;
             user-select: none;
-            pointer-events: none;
             line-height: 2.2;
             transition: 0.2s;
             order: -1;
@@ -158,10 +157,6 @@
                     &:active {
                         transition: 0s;
                     }
-
-                    >* {
-                        pointer-events: none;
-                    }
                 }
 
                 button {
@@ -285,6 +280,10 @@
                         &:active {
                             transition: 0s;
                             background-color: $fg-2;
+                        }
+
+                        >* {
+                            pointer-events: none;
                         }
                     }
 
