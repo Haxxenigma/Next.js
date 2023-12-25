@@ -2,6 +2,7 @@ import Forbidden from '@/components/Forbidden/forbidden';
 import styles from '@/app/chats/chats.module.scss';
 import Chat from '@/components/Chats/Chat/chat';
 import getUser from '@/utils/getUser';
+import prisma from '@/configs/prisma';
 
 export async function generateMetadata({ params }) {
     const chat = await prisma.chat.findUnique({
